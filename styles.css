@@ -1,0 +1,5 @@
+/* light-touch overrides on top of the cosmo theme */
+.quarto-title-block .description { font-size: 1.05rem; color: #555; }
+figure { margin-top: 1.2rem; margin-bottom: 1.2rem; }
+pre.sourceCode { border-radius: 6px; }
+h2 { margin-top: 2rem; }

@@ -1,0 +1,13 @@
+# settings inherited by every post under posts/
+freeze: auto
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    code-fold: true
+    code-tools: true
+    code-line-numbers: false
+execute:
+  echo: true
+  warning: false
+  error: false

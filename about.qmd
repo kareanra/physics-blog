@@ -1,0 +1,11 @@
+---
+title: "About"
+---
+
+Short technical notes on physics, worked from first principles and
+paired with runnable code. Every figure is generated when the page 
+is rendered, so the plots always match the
+equations.
+
+The source for the whole site, including the physics module, is on
+[GitHub](https://github.com/kareanra/physics-blog).

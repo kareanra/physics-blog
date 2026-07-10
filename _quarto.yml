@@ -1,0 +1,43 @@
+project:
+  type: website
+  output-dir: _site
+  execute-dir: project      # run every code cell from the repo root so `import dslit` works
+  preview:
+    port: 4200
+    host: "0.0.0.0"
+
+website:
+  title: "Computational Physics Notes"
+  description: "Worked derivations, intuition, and reproducible code."
+  site-url: "https://kareanra.github.io/physics-blog"
+  repo-url: "https://github.com/kareanra/physics-blog"
+  navbar:
+    left:
+      - text: "Posts"
+        href: index.qmd
+      - text: "About"
+        href: about.qmd
+    right:
+      - icon: github
+        href: "https://github.com/kareanra/physics-blog"
+        aria-label: GitHub
+  page-footer:
+    left: "© 2026 Kyle Arean-Raines"
+    right: "Built with [Quarto](https://quarto.org)."
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    code-copy: true
+    code-overflow: wrap
+    highlight-style: github
+    html-math-method: mathjax
+    fig-format: svg
+    fig-dpi: 140
+    fig-align: center
+
+execute:
+  freeze: auto             # re-execute a page only when its source changes
+  warning: false

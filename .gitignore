@@ -1,0 +1,7 @@
+/_site/
+/.quarto/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+# keep _freeze/ committed if you want CI to skip re-execution; ignored by default here
+/_freeze/

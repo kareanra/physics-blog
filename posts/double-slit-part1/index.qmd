@@ -1,0 +1,224 @@
+---
+title: "The double slit experiment, part 1: the path integral approach and getting through the slits"
+description: >
+  Deriving the free-particle propagator from the path integral, propagating a
+  Gaussian electron beam to a two-slit screen, and computing the probability of
+  passing through either slit three independent ways.
+date: 2026-07-10
+author: "Kyle Arean-Raines"
+categories: [quantum mechanics, path integrals, python]
+image: thumbnail.png
+toc: true
+bibliography: ../../references.bib
+---
+
+In this series we'll be using numerical and analytical methods for simulating
+and solving for the result of the famous quantum mechanical [double-slit experiment](https://en.wikipedia.org/wiki/Double-slit_experiment),
+performed with an electron and solved in a variety of different ways. As this is an advanced topic,
+having some familiarity with calculus and perhaps basic classical mechanics will help a great deal.
+That said, the accompanying derivations and code can be skipped if need be, and some calculations are omitted and left 
+as an exercise for the reader in any case (cue sinister laugh).
+
+I like this problem a lot, as it illustrates some really interesting quantum phenomena 
+(superposition, interference, uncertainty, measurement, decoherence), and you can layer on the complexity, 
+as we'll do here in discrete and progressive steps.
+
+Though two of three grad courses I took in quantum mechanics referenced this experiment, the treatment was mostly 
+qualitative (even though more rigorous mathematical machinery was subsequently developed throughout the course). Further,
+we didn't do much until Quantum II involving path integrals, which is an alternative way of formulating it that
+typically isn't taught in introductory classes on the subject. But this double-slit problem is actually relatively
+tractable using this alternative framework. I was inspired also by the book by Richard Feynman and Albert Hibbs called 
+_Quantum Mechanics and Path Integrals_. One of the first problems they look at is single-slit diffraction, and the 
+intuition for the path integral is built up using one, then multiple, slits in a screen (a continuum of screens in the limit).
+
+In Part 1 we will introduce this technique, then we'll work through the derivations in multiple posts.
+The starting point will be the experimental setup along with a quick primer on the classical Lagrangian and action, followed
+by a quick overview of path integrals in physics. Then we'll derive the propagator and probability amplitude
+for the free electron in our experiment and take it from there.
+
+Everything in this series is generated from a single physics module, `dslit.py`,
+that lives in the repository. Each figure below is produced when the page is
+rendered, so the plots can never drift from the equations that describe them.
+
+## The setup
+
+A free electron leaves the origin traveling in $+x$
+toward a screen a distance $L_1$ away. The screen has two slits: the top slit
+spans $y \in [+a/2,\, +a/2+b]$ and the bottom slit $y \in [-a/2-b,\, -a/2]$, so
+the central barrier between them has height $a$ and each opening has height $b$.
+
+```{python}
+#| label: fig-schematic
+#| fig-cap: "Geometry. A Gaussian beam leaves the source and drifts a distance $L_1$ to a screen with two slits of height $b$ separated by $a$."
+#| code-fold: true
+import matplotlib.pyplot as plt
+import dslit
+
+fig, ax = plt.subplots(figsize=(8, 4.2))
+dslit.draw_schematic(ax)
+plt.show()
+```
+
+## The free-particle kernel
+
+The propagator is the sum over all paths of $e^{iS/\hbar}$. For the free particle
+Lagrangian $\mathcal{L} = \tfrac12 m\dot{x}^2$, slice the time interval $T$ into
+$N$ steps of width $\varepsilon = T/N$:
+
+$$
+K = \lim_{N\to\infty}\left(\frac{m}{2\pi i\hbar\varepsilon}\right)^{N/2}
+\int \prod_{j=1}^{N-1} dx_j\;
+\exp\!\left[\frac{i}{\hbar}\sum_{j=0}^{N-1}\frac{m(x_{j+1}-x_j)^2}{2\varepsilon}\right].
+$$ {#eq-slices}
+
+Each intermediate integral is Gaussian, and the convolution of two free kernels
+of durations $\varepsilon_1,\varepsilon_2$ is again a free kernel of duration
+$\varepsilon_1+\varepsilon_2$. The product in @eq-slices therefore collapses to a
+single Gaussian:
+
+$$
+\boxed{\;K(x_b,T;x_a,0)=\sqrt{\frac{m}{2\pi i\hbar T}}\;
+\exp\!\left[\frac{i m (x_b-x_a)^2}{2\hbar T}\right]\;}
+$$ {#eq-kernel}
+
+In two dimensions the action separates, so $K(\mathbf{r}_b,T;\mathbf{r}_a,0)=K_x\,K_y$
+with the same form in each coordinate. The $x$-motion is free drift that fixes the
+arrival time $T_1 = L_1/v$; all of the interference lives in the transverse
+coordinate $y$, so from here on $K_y$ is the object we push through the slits.
+
+## A Gaussian beam, and where it is by the time it reaches the slits
+
+"Traveling in $+x$" means a narrow spread of transverse momentum, i.e. a Gaussian
+transverse profile of waist $\sigma_0$ at the source. Convolving that Gaussian
+with @eq-kernel keeps it Gaussian, and its width at the slit plane is
+
+$$
+\sigma_{T_1}^2 = \sigma_0^2 + \left(\frac{\hbar T_1}{2 m \sigma_0}\right)^2 .
+$$ {#eq-spread}
+
+With a 1 keV electron, a 10 cm drift, and a 1 µm waist:
+
+```{python}
+#| label: derived
+#| code-fold: true
+d = dslit.derived_quantities()
+print(f"de Broglie wavelength : {d['lam']*1e12:6.2f} pm")
+print(f"speed                 : {d['v']:.3e} m/s  ({d['v']/2.998e8:.3f} c)")
+print(f"flight time T1        : {d['T1']*1e9:6.3f} ns")
+print(f"beam width at slits   : {d['sigmaT']*1e6:6.3f} um")
+```
+
+## Probability of passing through either slit
+
+The transmission is the modulus squared $|\psi(y,T_1)|^2$, integrated over the two openings. Because
+the arriving beam is a Gaussian of width $\sigma_{T_1}$ and the two slits are
+mirror images, this collapses to a difference of error functions:
+
+$$
+P_{\text{either}} = \operatorname{erf}\!\left(\frac{a/2+b}{\sqrt{2}\,\sigma_{T_1}}\right)
+- \operatorname{erf}\!\left(\frac{a/2}{\sqrt{2}\,\sigma_{T_1}}\right).
+$$ {#eq-transmission}
+
+Three independent computations agree: the closed form @eq-transmission, direct
+quadrature of $|\psi|^2$ over the openings, and a full Fresnel convolution of the
+Gaussian against the kernel @eq-kernel (which also validates the kernel itself,
+since it reproduces the analytic spreading of @eq-spread).
+
+```{python}
+#| label: transmission
+#| code-fold: true
+import numpy as np
+
+d = dslit.derived_quantities()
+P_cf = dslit.P_closed_form(sigmaT=d["sigmaT"])
+P_q = dslit.P_quadrature(sigmaT=d["sigmaT"])
+
+# kernel-propagation check against the analytic spreading Gaussian
+y = np.linspace(-4e-6, 4e-6, 41)
+dens_num = np.abs(dslit.propagate_via_kernel(y, d["T1"]))**2
+dens_ana = np.exp(-y**2/(2*d["sigmaT"]**2)) / (np.sqrt(2*np.pi)*d["sigmaT"])
+rel = np.max(np.abs(dens_num - dens_ana)) / np.max(dens_ana)
+
+print(f"P (closed form erf)        = {P_cf:.6f}")
+print(f"P (quadrature)             = {P_q:.6f}")
+print(f"|difference|               = {abs(P_cf-P_q):.1e}")
+print(f"kernel vs analytic |psi|^2 = {rel:.1e} (max relative error)")
+```
+
+About 28% of the beam makes it through; the rest is stopped by the central
+septum and the outer walls. The figure below shows the intensity arriving at the
+slit plane with the two openings shaded, overlaid with the kernel-propagated
+points to show the derivation and the numerics land on the same curve.
+
+```{python}
+#| label: fig-slitplane
+#| fig-cap: "Intensity at the slit plane. Shaded bands are the two openings; the shaded area is $P_{\\text{either}}$. Points are the Fresnel-propagated kernel, the curve is the analytic Gaussian."
+#| code-fold: true
+BLUE, AMBER = "#185FA5", "#BA7517"
+sigmaT = d["sigmaT"]
+yy = np.linspace(-4e-6, 4e-6, 800)
+dens = np.exp(-yy**2/(2*sigmaT**2)) / (np.sqrt(2*np.pi)*sigmaT)
+yk = np.linspace(-4e-6, 4e-6, 61)
+densk = np.abs(dslit.propagate_via_kernel(yk, d["T1"]))**2
+
+a, b = dslit.DEFAULTS["a"], dslit.DEFAULTS["b"]
+fig, ax = plt.subplots(figsize=(8, 4.2))
+ax.plot(yy*1e6, dens/1e6, color=BLUE, lw=2, label=r"analytic $|\psi(y,T_1)|^2$")
+ax.plot(yk*1e6, densk/1e6, "o", ms=4, color=AMBER, mfc="none",
+        label="kernel (Fresnel) propagation")
+for lo, hi in [(a/2, a/2+b), (-a/2-b, -a/2)]:
+    ax.axvspan(lo*1e6, hi*1e6, color=BLUE, alpha=0.15)
+ax.set_xlabel(r"$y$ at slit plane [$\mu$m]")
+ax.set_ylabel(r"probability density [$\mu$m$^{-1}$]")
+ax.legend(frameon=False)
+plt.show()
+```
+
+## How transmission depends on the knobs
+
+Sweeping the geometry and the beam shows two effects worth noting. A faster
+electron spends less time in flight, spreads less by @eq-spread, and is therefore
+blocked *more* by the central septum, so $P$ falls with energy for this on-axis
+layout. And there is a focusing optimum in the waist: too tight a $\sigma_0$
+spreads quickly by the uncertainty term, too loose is already wide at the source.
+The minimum-spread waist is $\sigma_0=\sqrt{\hbar T_1/m}$.
+
+```{python}
+#| label: fig-sweeps
+#| fig-cap: "Transmission versus slit height, electron energy, and beam waist. Dashed lines mark the defaults; the dotted line is the minimum-spread waist."
+#| code-fold: true
+GRAY = "#5F5E5A"
+E0, s0 = dslit.DEFAULTS["E_eV"], dslit.DEFAULTS["sigma0"]
+fig, ax = plt.subplots(1, 3, figsize=(11, 3.4))
+
+bb = np.linspace(0.05, 4, 200)*1e-6
+ax[0].plot(bb*1e6, [dslit.P_closed_form(a=a, b=bi) for bi in bb], color=BLUE, lw=2)
+ax[0].axvline(b*1e6, color=GRAY, ls="--", lw=1)
+ax[0].set_xlabel(r"slit height $b$ [$\mu$m]"); ax[0].set_ylabel("P(either slit)")
+
+EE = np.logspace(1.5, 4.5, 200)
+PE = [dslit.P_closed_form(sigmaT=dslit.derived_quantities(E_eV=Ei)["sigmaT"]) for Ei in EE]
+ax[1].semilogx(EE, PE, color=BLUE, lw=2); ax[1].axvline(E0, color=GRAY, ls="--", lw=1)
+ax[1].set_xlabel("electron energy [eV]")
+
+ss = np.logspace(-7.3, -5.3, 200)
+PS = [dslit.P_closed_form(sigmaT=dslit.derived_quantities(sigma0=si)["sigmaT"]) for si in ss]
+sopt = np.sqrt(dslit.hbar*d["T1"]/dslit.m_e)
+ax[2].semilogx(ss*1e6, PS, color=BLUE, lw=2)
+ax[2].axvline(s0*1e6, color=GRAY, ls="--", lw=1)
+ax[2].axvline(sopt*1e6, color=AMBER, ls=":", lw=1.5)
+ax[2].set_xlabel(r"beam waist $\sigma_0$ [$\mu$m]")
+fig.tight_layout(); plt.show()
+```
+
+## Next
+
+We now have the kernel, a beam that reaches the slits, and the fraction that gets
+through. [Part 2](../double-slit-part2/) propagates the clipped wavefunction to
+a detection screen and builds the interference pattern two
+ways: an analytic closed form for Gaussian slits and a numeric Fresnel integral
+for hard slits. [Part 3](../double-slit-part3/) couples the slits to a which-path
+detector and watches the fringes wash out.
+
+The full source for this series is on
+[GitHub](https://github.com/kareanra/physics-blog).
