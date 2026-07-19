@@ -1,13 +1,13 @@
 ---
 title: "The double slit experiment, part 1: the background"
 description: >
-  Deriving the free-particle propagator from the path integral, propagating a
-  Gaussian electron beam to a two-slit screen, and computing the probability of
-  passing through either slit three independent ways.
+  A conceptual walkthrough of diffraction and interference in the classical
+  wave picture, the quantum double-slit thought experiment with single
+  photons, and Feynman's neutron-scattering-crystal analogy for
+  which-path information.
 date: 2026-07-10
 author: "Kyle Arean-Raines"
-categories: [quantum mechanics, path integrals, Fourier transforms, Gaussian integrals, python]
-image: thumbnail.png
+categories: [quantum mechanics, wave-particle duality, interference]
 toc: true
 bibliography: ../../references.bib
 ---
@@ -151,6 +151,13 @@ The main takeaway here is that if there were in principle a way to determine a p
 that will alter its trajectory by virtue of "wavefunction collapse" (more on this mechanism later).
 
 :::
+
+## Up next
+
+In [Part 2](../double-slit-part2/index.qmd) we'll put this intuition into math: solving the
+Schrödinger equation for a Gaussian electron wave packet passing through two
+Gaussian-aperture slits, and deriving the resulting interference pattern in
+closed form.
 
 The full source for this series is on
 [GitHub](https://github.com/kareanra/physics-blog).

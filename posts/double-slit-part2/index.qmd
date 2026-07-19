@@ -1,13 +1,13 @@
 ---
-title: "The double slit experiment, part 1: the background"
+title: "The double slit experiment, part 2: the math"
 description: >
-  Deriving the free-particle propagator from the path integral, propagating a
-  Gaussian electron beam to a two-slit screen, and computing the probability of
-  passing through either slit three independent ways.
-date: 2026-07-10
+  Solving the Schrödinger equation for a Gaussian wave packet incident on two
+  Gaussian-aperture slits, deriving a closed-form interference pattern via
+  complex Gaussian integrals, and checking the predicted fringe spacing
+  numerically.
+date: 2026-07-19
 author: "Kyle Arean-Raines"
-categories: [quantum mechanics, path integrals, Fourier transforms, Gaussian integrals, python]
-image: thumbnail.png
+categories: [quantum mechanics, Schrödinger equation, Gaussian integrals, python]
 toc: true
 bibliography: ../../references.bib
 ---
