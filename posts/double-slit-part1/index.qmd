@@ -1,224 +1,165 @@
 ---
-title: "The double slit experiment, part 1: the path integral approach and getting through the slits"
+title: "The double slit experiment, part 1: the background"
 description: >
-  Deriving the free-particle propagator from the path integral, propagating a
-  Gaussian electron beam to a two-slit screen, and computing the probability of
-  passing through either slit three independent ways.
+  A conceptual walkthrough of diffraction and interference in the classical
+  wave picture, the quantum double-slit thought experiment with single
+  photons, and Feynman's neutron-scattering-crystal analogy for
+  which-path information.
 date: 2026-07-10
 author: "Kyle Arean-Raines"
-categories: [quantum mechanics, path integrals, python]
-image: thumbnail.png
+categories: [quantum mechanics, wave-particle duality, interference]
 toc: true
 bibliography: ../../references.bib
 ---
 
+# The quantum double-slit experiment
+
+## Part 1: the background
+
 In this series we'll be using numerical and analytical methods for simulating
 and solving for the result of the famous quantum mechanical [double-slit experiment](https://en.wikipedia.org/wiki/Double-slit_experiment),
 performed with an electron and solved in a variety of different ways. As this is an advanced topic,
-having some familiarity with calculus and perhaps basic classical mechanics will help a great deal.
+having some familiarity with calculus and perhaps basic classical [Lagrangian] mechanics will help a great deal.
 That said, the accompanying derivations and code can be skipped if need be, and some calculations are omitted and left 
 as an exercise for the reader in any case (cue sinister laugh).
 
 I like this problem a lot, as it illustrates some really interesting quantum phenomena 
-(superposition, interference, uncertainty, measurement, decoherence), and you can layer on the complexity, 
+(wave-particle duality, superposition, interference, uncertainty, measurement), and you can layer on the complexity, 
 as we'll do here in discrete and progressive steps.
 
-Though two of three grad courses I took in quantum mechanics referenced this experiment, the treatment was mostly 
-qualitative (even though more rigorous mathematical machinery was subsequently developed throughout the course). Further,
-we didn't do much until Quantum II involving path integrals, which is an alternative way of formulating it that
-typically isn't taught in introductory classes on the subject. But this double-slit problem is actually relatively
-tractable using this alternative framework. I was inspired also by the book by Richard Feynman and Albert Hibbs called 
-_Quantum Mechanics and Path Integrals_. One of the first problems they look at is single-slit diffraction, and the 
-intuition for the path integral is built up using one, then multiple, slits in a screen (a continuum of screens in the limit).
+### Classical picture: light
 
-In Part 1 we will introduce this technique, then we'll work through the derivations in multiple posts.
-The starting point will be the experimental setup along with a quick primer on the classical Lagrangian and action, followed
-by a quick overview of path integrals in physics. Then we'll derive the propagator and probability amplitude
-for the free electron in our experiment and take it from there.
+Many of you may know that light has both particle- and wave-like properties. A photon is an "atom" of light,
+an indivisible and smallest packet of light that exhibits particle-like behavior.
+However, light at a macroscopic level - and that which we encounter in our daily life - behaves as a wave. 
+And waves exhibit two phenomena that are critical to understanding the double-slit experiment: 
+_diffraction_ and _interference_.
 
-Everything in this series is generated from a single physics module, `dslit.py`,
-that lives in the repository. Each figure below is produced when the page is
-rendered, so the plots can never drift from the equations that describe them.
+#### Diffraction
 
-## The setup
+If you shine a laser from a distance onto a piece of paper with a tiny little pinhole in the middle, most of the 
+light will be absorbed or reflected by the surface of the paper, and some will make it through the hole. 
+If you have a second piece of paper behind the first (call it the "detector screen"), you'll see that the transmitted 
+light that goes through the hole spreads out a little bit. The dot on the paper on the detector screen will be slightly 
+wider then the initial, incoming beam. The highest intensity of light on the detector will be in the center of the dot.
+As you work your way outward from the center, the intensity decreases until it dies off. 
+This spreading out is known as diffraction, and is due to light bending around the sides of the hole.
 
-A free electron leaves the origin traveling in $+x$
-toward a screen a distance $L_1$ away. The screen has two slits: the top slit
-spans $y \in [+a/2,\, +a/2+b]$ and the bottom slit $y \in [-a/2-b,\, -a/2]$, so
-the central barrier between them has height $a$ and each opening has height $b$.
+#### Interference
 
-```{python}
-#| label: fig-schematic
-#| fig-cap: "Geometry. A Gaussian beam leaves the source and drifts a distance $L_1$ to a screen with two slits of height $b$ separated by $a$."
-#| code-fold: true
-import matplotlib.pyplot as plt
-import dslit
+Waves are basically just oscillations of _something_, ups and downs in a repeating pattern. The peaks and troughs
+of light correspond to peaks and troughs of electric and magnetic fields, but that's out of scope for this post. All
+you need to know is that two beams of light that overlap will, generally, _interfere_. Roughly, when a peak 
+overlaps with a peak, the intensity of the light increases. Same with a trough overlapping a trough. 
+But when a peak and a trough overlap, they cancel each other out and you get no light at all.
 
-fig, ax = plt.subplots(figsize=(8, 4.2))
-dslit.draw_schematic(ax)
-plt.show()
-```
+![Constructive and destructive interference.](../../diagrams/double-slit-part1/wave-interference.svg)
 
-## The free-particle kernel
+#### Classical double-slit
 
-The propagator is the sum over all paths of $e^{iS/\hbar}$. For the free particle
-Lagrangian $\mathcal{L} = \tfrac12 m\dot{x}^2$, slice the time interval $T$ into
-$N$ steps of width $\varepsilon = T/N$:
+Combining the above two concepts, take a look at the following diagram and first see if you can reason about
+the result on your own.
 
-$$
-K = \lim_{N\to\infty}\left(\frac{m}{2\pi i\hbar\varepsilon}\right)^{N/2}
-\int \prod_{j=1}^{N-1} dx_j\;
-\exp\!\left[\frac{i}{\hbar}\sum_{j=0}^{N-1}\frac{m(x_{j+1}-x_j)^2}{2\varepsilon}\right].
-$$ {#eq-slices}
+![Waves spreading out and overlapping after passing through two slits.](../../diagrams/double-slit-part1/double-slit-interference.svg)
 
-Each intermediate integral is Gaussian, and the convolution of two free kernels
-of durations $\varepsilon_1,\varepsilon_2$ is again a free kernel of duration
-$\varepsilon_1+\varepsilon_2$. The product in @eq-slices therefore collapses to a
-single Gaussian:
+Diffraction causes the bending of the light going through each slit, and interference causes the regions of high and
+low intensity on the detector screen.
 
-$$
-\boxed{\;K(x_b,T;x_a,0)=\sqrt{\frac{m}{2\pi i\hbar T}}\;
-\exp\!\left[\frac{i m (x_b-x_a)^2}{2\hbar T}\right]\;}
-$$ {#eq-kernel}
+### Quantum picture: also with light
 
-In two dimensions the action separates, so $K(\mathbf{r}_b,T;\mathbf{r}_a,0)=K_x\,K_y$
-with the same form in each coordinate. The $x$-motion is free drift that fixes the
-arrival time $T_1 = L_1/v$; all of the interference lives in the transverse
-coordinate $y$, so from here on $K_y$ is the object we push through the slits.
+As I said before, light has both particle-like and wave-like behavior. Let's focus on the particle-like properties of
+light now. When you dial down the intensity (brightness) of light, you're releasing fewer photons from the light source
+over a certain timespan. You can make it so the light source is so dim that individual photons go through
+at such a slow rate that each photon goes through the slit and hits the detector screen before the next photon starts
+its journey. So how would we expect the light to behave? What would the pattern on the detector look like? 
 
-## A Gaussian beam, and where it is by the time it reaches the slits
+Let's make our detector screen a theoretical, 2-dimensional screen that can detect where a single photon lands. When
+the light is on full blast like in the above experiment, the detector will detect a large number of photons over a
+given (short) timespan. The resulting pattern will exhibit wave interference, as we described before.
 
-"Traveling in $+x$" means a narrow spread of transverse momentum, i.e. a Gaussian
-transverse profile of waist $\sigma_0$ at the source. Convolving that Gaussian
-with @eq-kernel keeps it Gaussian, and its width at the slit plane is
+However, now dial down the light intensity to be sufficiently low that single photons arrive sequentially at the 
+detector screen, passing through either the top or bottom slit (or... both or neither, as we'll see). 
+Okay, so admittedly this is really a _semi-classical_ picture since 
+we're dealing with individual photons. But hear me out. Classically,
+we would expect the screen to have two blotches where the photons hit the screen, each directly, line-of-sight behind 
+one of the slits. We wouldn't expect interference, since each photon passes through sequentially with no overlap. 
 
-$$
-\sigma_{T_1}^2 = \sigma_0^2 + \left(\frac{\hbar T_1}{2 m \sigma_0}\right)^2 .
-$$ {#eq-spread}
+BUT, we in fact _do_ see the interference fringes on the screen, provided we don't set up a way to detect which
+slit each photon went through. I'll get to the mathematics and maybe even philosophy of what happens when the
+observer (us) detects which slit the photon passed through. But for now, take it as a given that this is the case.
 
-With a 1 keV electron, a 10 cm drift, and a 1 µm waist:
+We'll show mathematically that we get the same interference pattern with individual electrons. Disclaimer: the
+derivations are pretty advanced and you can skip to the resulting plots to see what actually appears on the screen.
 
-```{python}
-#| label: derived
-#| code-fold: true
-d = dslit.derived_quantities()
-print(f"de Broglie wavelength : {d['lam']*1e12:6.2f} pm")
-print(f"speed                 : {d['v']:.3e} m/s  ({d['v']/2.998e8:.3f} c)")
-print(f"flight time T1        : {d['T1']*1e9:6.3f} ns")
-print(f"beam width at slits   : {d['sigmaT']*1e6:6.3f} um")
-```
+One note about measurement: even if we were to allow any quantum experiment exhibiting this interference phenomenon
+to be carried out without actually measuring anything, if it were possible to - after the fact - deduce the trajectory
+of our quantum particle, there no interference pattern appears. I find this profound and fascinating. To illustrate 
+this I'll borrow a thought experiment from Richard Feynman's lecture notes on quantum mechanics. Feel free to skip
+this next section if it isn't of interest, or is too advanced. It does require some prior physics knowledge.
 
-## Probability of passing through either slit
+::: {.callout-note collapse="true"}
+### Feynman's scattering crystal
 
-The transmission is the modulus squared $|\psi(y,T_1)|^2$, integrated over the two openings. Because
-the arriving beam is a Gaussian of width $\sigma_{T_1}$ and the two slits are
-mirror images, this collapses to a difference of error functions:
+Here I will quote Feynman rather than paraphrasing. After all, I could never do it justice with my own description.
+For reference, I'm quoting from his third section of [Caltech lecture notes](https://www.feynmanlectures.caltech.edu/III_03.html).
 
-$$
-P_{\text{either}} = \operatorname{erf}\!\left(\frac{a/2+b}{\sqrt{2}\,\sigma_{T_1}}\right)
-- \operatorname{erf}\!\left(\frac{a/2}{\sqrt{2}\,\sigma_{T_1}}\right).
-$$ {#eq-transmission}
+> Our next example is a phenomenon in which we have to analyze the interference of probability amplitudes somewhat 
+> carefully. We look at the process of the scattering of neutrons from a crystal. 
+> Suppose we have a crystal which has a lot of atoms with nuclei at their centers, arranged in a periodic array, 
+> and a neutron beam that comes from far away. We can label the various nuclei in the crystal by an index i
+, where i
+ runs over the integers 1
+, 2
+, 3
+, …, N
+, with N
+ equal to the total number of atoms.
+> We have here a large number of apparently indistinguishable routes. They are indistinguishable because a 
+> low-energy neutron is scattered from a nucleus without knocking the atom out of its place in the crystal—no “record”
+> is left of the scattering.
+> 
+> [Skipping some math here]
+> 
+> Because we are adding amplitudes of scattering from atoms with different space positions, the amplitudes will have 
+> different phases giving the characteristic interference pattern...
+> 
+> The neutron intensity as a function of angle in such an experiment is indeed often found to show tremendous 
+> variations, with very sharp interference peaks and almost nothing in between—as shown [here] 
+>
+> ![Fig. 3–6(a)](../../diagrams/double-slit-part1/feynman-crystal-scattering.svgz){#fig-scattering}. 
+> However, for certain kinds of crystals it does not work this way, and there is—along with the interference peaks 
+> discussed above—a general background of scattering in all directions. We must try to understand the apparently 
+> mysterious reasons for this. Well, we have not considered one important property of the neutron. It has a spin of 
+> one-half, and so there are two conditions in which it can be: either spin “up”... or spin “down.” 
+> If the nuclei of the crystal have no spin, the neutron spin doesn’t have any effect. But when the nuclei of 
+> the crystal also have a spin, say a spin of one-half, you will observe the background of smeared-out scattering 
+> described above. The explanation is as follows.
+>
+>If the neutron has one direction of spin and the atomic nucleus has the same spin, then no change of spin can occur
+> in the scattering process. If the neutron and atomic nucleus have opposite spin, then scattering can occur by two 
+> processes, one in which the spins are unchanged and another in which the spin directions are exchanged.
+> This rule for no net change of the sum of the spins is analogous to our classical law of conservation of angular
+> momentum. We can begin to understand the phenomenon if we assume that all the scattering nuclei are set up with 
+> spins in one direction. A neutron with the same spin will scatter with the expected sharp interference distribution.
+> What about one with opposite spin? If it scatters without spin flip, then nothing is changed from the above; 
+> but if the two spins flip over in the scattering, we could, in principle, find out which nucleus had done the 
+> scattering, since it would be the only one with spin turned over. Well, if we can tell which atom did the 
+> scattering, what have the other atoms got to do with it? Nothing, of course. The scattering is exactly the same 
+> as that from a single atom.
 
-Three independent computations agree: the closed form @eq-transmission, direct
-quadrature of $|\psi|^2$ over the openings, and a full Fresnel convolution of the
-Gaussian against the kernel @eq-kernel (which also validates the kernel itself,
-since it reproduces the analytic spreading of @eq-spread).
+The main takeaway here is that if there were in principle a way to determine a particle's trajectory
+that will alter its trajectory by virtue of "wavefunction collapse" (more on this mechanism later).
 
-```{python}
-#| label: transmission
-#| code-fold: true
-import numpy as np
+:::
 
-d = dslit.derived_quantities()
-P_cf = dslit.P_closed_form(sigmaT=d["sigmaT"])
-P_q = dslit.P_quadrature(sigmaT=d["sigmaT"])
+## Up next
 
-# kernel-propagation check against the analytic spreading Gaussian
-y = np.linspace(-4e-6, 4e-6, 41)
-dens_num = np.abs(dslit.propagate_via_kernel(y, d["T1"]))**2
-dens_ana = np.exp(-y**2/(2*d["sigmaT"]**2)) / (np.sqrt(2*np.pi)*d["sigmaT"])
-rel = np.max(np.abs(dens_num - dens_ana)) / np.max(dens_ana)
-
-print(f"P (closed form erf)        = {P_cf:.6f}")
-print(f"P (quadrature)             = {P_q:.6f}")
-print(f"|difference|               = {abs(P_cf-P_q):.1e}")
-print(f"kernel vs analytic |psi|^2 = {rel:.1e} (max relative error)")
-```
-
-About 28% of the beam makes it through; the rest is stopped by the central
-septum and the outer walls. The figure below shows the intensity arriving at the
-slit plane with the two openings shaded, overlaid with the kernel-propagated
-points to show the derivation and the numerics land on the same curve.
-
-```{python}
-#| label: fig-slitplane
-#| fig-cap: "Intensity at the slit plane. Shaded bands are the two openings; the shaded area is $P_{\\text{either}}$. Points are the Fresnel-propagated kernel, the curve is the analytic Gaussian."
-#| code-fold: true
-BLUE, AMBER = "#185FA5", "#BA7517"
-sigmaT = d["sigmaT"]
-yy = np.linspace(-4e-6, 4e-6, 800)
-dens = np.exp(-yy**2/(2*sigmaT**2)) / (np.sqrt(2*np.pi)*sigmaT)
-yk = np.linspace(-4e-6, 4e-6, 61)
-densk = np.abs(dslit.propagate_via_kernel(yk, d["T1"]))**2
-
-a, b = dslit.DEFAULTS["a"], dslit.DEFAULTS["b"]
-fig, ax = plt.subplots(figsize=(8, 4.2))
-ax.plot(yy*1e6, dens/1e6, color=BLUE, lw=2, label=r"analytic $|\psi(y,T_1)|^2$")
-ax.plot(yk*1e6, densk/1e6, "o", ms=4, color=AMBER, mfc="none",
-        label="kernel (Fresnel) propagation")
-for lo, hi in [(a/2, a/2+b), (-a/2-b, -a/2)]:
-    ax.axvspan(lo*1e6, hi*1e6, color=BLUE, alpha=0.15)
-ax.set_xlabel(r"$y$ at slit plane [$\mu$m]")
-ax.set_ylabel(r"probability density [$\mu$m$^{-1}$]")
-ax.legend(frameon=False)
-plt.show()
-```
-
-## How transmission depends on the knobs
-
-Sweeping the geometry and the beam shows two effects worth noting. A faster
-electron spends less time in flight, spreads less by @eq-spread, and is therefore
-blocked *more* by the central septum, so $P$ falls with energy for this on-axis
-layout. And there is a focusing optimum in the waist: too tight a $\sigma_0$
-spreads quickly by the uncertainty term, too loose is already wide at the source.
-The minimum-spread waist is $\sigma_0=\sqrt{\hbar T_1/m}$.
-
-```{python}
-#| label: fig-sweeps
-#| fig-cap: "Transmission versus slit height, electron energy, and beam waist. Dashed lines mark the defaults; the dotted line is the minimum-spread waist."
-#| code-fold: true
-GRAY = "#5F5E5A"
-E0, s0 = dslit.DEFAULTS["E_eV"], dslit.DEFAULTS["sigma0"]
-fig, ax = plt.subplots(1, 3, figsize=(11, 3.4))
-
-bb = np.linspace(0.05, 4, 200)*1e-6
-ax[0].plot(bb*1e6, [dslit.P_closed_form(a=a, b=bi) for bi in bb], color=BLUE, lw=2)
-ax[0].axvline(b*1e6, color=GRAY, ls="--", lw=1)
-ax[0].set_xlabel(r"slit height $b$ [$\mu$m]"); ax[0].set_ylabel("P(either slit)")
-
-EE = np.logspace(1.5, 4.5, 200)
-PE = [dslit.P_closed_form(sigmaT=dslit.derived_quantities(E_eV=Ei)["sigmaT"]) for Ei in EE]
-ax[1].semilogx(EE, PE, color=BLUE, lw=2); ax[1].axvline(E0, color=GRAY, ls="--", lw=1)
-ax[1].set_xlabel("electron energy [eV]")
-
-ss = np.logspace(-7.3, -5.3, 200)
-PS = [dslit.P_closed_form(sigmaT=dslit.derived_quantities(sigma0=si)["sigmaT"]) for si in ss]
-sopt = np.sqrt(dslit.hbar*d["T1"]/dslit.m_e)
-ax[2].semilogx(ss*1e6, PS, color=BLUE, lw=2)
-ax[2].axvline(s0*1e6, color=GRAY, ls="--", lw=1)
-ax[2].axvline(sopt*1e6, color=AMBER, ls=":", lw=1.5)
-ax[2].set_xlabel(r"beam waist $\sigma_0$ [$\mu$m]")
-fig.tight_layout(); plt.show()
-```
-
-## Next
-
-We now have the kernel, a beam that reaches the slits, and the fraction that gets
-through. [Part 2](../double-slit-part2/) propagates the clipped wavefunction to
-a detection screen and builds the interference pattern two
-ways: an analytic closed form for Gaussian slits and a numeric Fresnel integral
-for hard slits. [Part 3](../double-slit-part3/) couples the slits to a which-path
-detector and watches the fringes wash out.
+In [Part 2](../double-slit-part2/index.qmd) we'll put this intuition into math: solving the
+Schrödinger equation for a Gaussian electron wave packet passing through two
+Gaussian-aperture slits, and deriving the resulting interference pattern in
+closed form.
 
 The full source for this series is on
 [GitHub](https://github.com/kareanra/physics-blog).
+The derivations, code, and prose are all mine. However, I did consult Claude to proofread and for help
+setting up the project and rendering equations.

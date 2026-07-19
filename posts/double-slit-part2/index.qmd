@@ -1,0 +1,260 @@
+---
+title: "The double slit experiment, part 2: the math"
+description: >
+  Solving the Schrödinger equation for a Gaussian wave packet incident on two
+  Gaussian-aperture slits, deriving a closed-form interference pattern via
+  complex Gaussian integrals, and checking the predicted fringe spacing
+  numerically.
+date: 2026-07-19
+author: "Kyle Arean-Raines"
+categories: [quantum mechanics, Schrödinger equation, Gaussian integrals, python]
+toc: true
+bibliography: ../../references.bib
+---
+
+# The quantum double-slit experiment
+
+## Part 2: the math
+
+Now let's get our hands dirty with some math and code. Again, this is pretty advanced stuff,
+so feel free to skip to the diagrams showing the interference results.
+
+Prerequisites: differential equations, Fourier transforms, 
+Gaussian integrals, vector calculus, and perhaps some basic physics.
+
+Though two of three grad courses I took on quantum mechanics referenced this experiment, the treatment was mostly 
+qualitative, even though rigorous mathematical machinery was subsequently developed throughout the course. Further,
+we didn't do much until Quantum II involving path integrals, which is an alternative way of formulating quantum that
+typically isn't taught in introductory classes on the subject. But this double-slit problem is actually relatively
+tractable using this alternative framework. We'll get to that after walking through some derivations using the
+Schrödinger approach. 
+
+### Solution using the Schrödinger equation
+
+The Schrödinger equation is a second-order partial differential equation that 
+describes the time evolution of a quantum system. In classical mechanics, using the Euler-Lagrange
+equations gives you a deterministic trajectory of a particle or system through space and time. If you know
+the initial state of the system at a given time, you can calculate the system state at any subsequent time,
+provided you know the form of the Lagrangian (energy "function" for the environment the system is in).
+
+In quantum mechanics, there is no such determinism. It is the probabilities of the state being in a state
+at a given time that evolve according to the equations of "motion." So here's the famous Schrödinger equation, 
+(technically speaking, the position- or space-representation of the general equation):
+
+$$
+i \hbar {\frac {\partial^2 \Psi(\mathbf{r}, t)}{\partial t^2}} = \frac{-\hbar^2}{2m} \nabla^2 \Psi(\mathbf{r}, t) + V (\mathbf{r}, t)  \Psi(\mathbf{r}, t)
+$$
+
+where $\Psi$ is the wavefunction, which varies in space and time and $V(\mathbf{r}, t)$ is the potential energy. The
+wavefunction describes the probability of finding a particle at a given point in space at a given time.
+
+#### The setup
+
+Now let's make this concrete with our experiment. A free electron leaves the origin traveling in $+x$
+toward a screen a distance $L_1$ away. The screen has two slits: the top slit
+spans $y \in [+a/2,\, +a/2+b]$ and the bottom slit $y \in [-a/2-b,\, -a/2]$, so
+the central barrier between them has height $a$ and each opening has height $b$.
+
+```{python}
+#| label: fig-schematic
+#| fig-cap: "Geometry. A Gaussian beam leaves the source and drifts a distance $L_1$ to a screen with two slits of height $b$ separated by $a$."
+#| code-fold: true
+import matplotlib.pyplot as plt
+import dslit
+
+fig, ax = plt.subplots(figsize=(8, 4.2))
+dslit.draw_schematic(ax)
+plt.show()
+```
+
+#### The derivation
+
+Here we let the transmitted wave keep going to a
+detection screen a distance $L_2$ beyond the slits and derive the interference
+pattern in closed form. The trick is to model each slit as a Gaussian aperture:
+a Gaussian packet times a Gaussian slit is still Gaussian, and free evolution
+maps Gaussians to Gaussians, so every step stays analytic and no grid is needed.
+
+Throughout, $y$ is the transverse coordinate and the along-axis drift just
+supplies a clock: the packet reaches the slits at $t_1 = L_1/v$ and the screen at
+$t_2 = L_2/v$, with $v = \hbar k_0/m$. The incident state is the standard free
+Gaussian wave packet of Cohen-Tannoudji (Complement $G_I$).
+
+::: {.callout-note collapse="true"}
+##### The complex Gaussian integral
+
+Every evolution step below is a single application of the complex Gaussian
+integral
+
+$$
+\int_{-\infty}^{\infty} e^{-A y^2 + B y + C}\,dy
+= \sqrt{\frac{\pi}{A}}\;\exp\!\left[\frac{B^2}{4A} + C\right],
+\qquad \operatorname{Re} A > 0,
+$$
+
+which stays valid by analytic continuation when $A$ is complex with positive
+real part.
+:::
+
+##### The incident packet
+
+Start with a Gaussian wave packet along $y$, following the convention found in many graduate texts (see e.g. Cohen-Tannoudji, 
+Sakurai).
+
+$$
+\psi(y,0) = \left(\frac{1}{2\pi\sigma_0^2}\right)^{1/4} e^{-y^2/4\sigma_0^2},
+\qquad
+|\psi(y,0)|^2 = \frac{1}{\sqrt{2\pi}\,\sigma_0}\, e^{-y^2/2\sigma_0^2},
+$$ {#eq-psi0}
+
+##### Free evolution to the slit plane
+
+Convolve @eq-psi0 with the free-particle kernel over $t_1$, writing
+$s \equiv i m / 2\hbar t_1$:
+
+$$
+\psi(y,t_1) = N_0 \sqrt{\frac{m}{2\pi i\hbar t_1}}
+\int dy'\, \exp\!\left[\, s(y - y')^2 - \frac{y'^2}{4\sigma_0^2}\,\right].
+$$
+
+Collecting the $y'$ terms gives $A = \tfrac{1}{4\sigma_0^2} - s$, $B = -2sy$, and
+$C = sy^2$. The integral identity, together with $1/s = -2i\hbar t_1/m$,
+collapses the exponent to $-y^2/4\alpha_1$ and the prefactor to
+$\sqrt{\sigma_0^2/\alpha_1}$, with
+
+$$
+\boxed{\;\alpha_1 = \sigma_0^2 + \frac{i\hbar t_1}{2m}\;}
+\qquad
+\psi(y,t_1) = N_1\, e^{-y^2/4\alpha_1},
+\quad N_1 = N_0\sqrt{\frac{\sigma_0^2}{\alpha_1}}.
+$$ {#eq-alpha1}
+
+This is the Cohen-Tannoudji spreading packet: the modulus of @eq-alpha1 gives
+$\Delta y(t_1) = \sigma_0\sqrt{1 + (\hbar t_1/2m\sigma_0^2)^2}$. Both the analytic track here and
+the hard-slit numeric track saved for later start from this arrived packet.
+
+##### The Gaussian slits
+
+For the sake of reaching a closed form solution: model the two openings as Gaussian apertures centered at
+$y_\pm = \pm y_s$, with
+$y_s = (a+b)/2$ and width $\beta = b/\sqrt{2\pi}$ (chosen so a uniformly
+illuminated Gaussian slit transmits the same flux as a hard slit of height $b$):
+
+$$
+T(y) = \sum_{j=\pm} e^{-(y - j y_s)^2 / 2\beta^2},
+\qquad
+\phi(y) = \psi(y,t_1)\,T(y).
+$$ {#eq-transmission}
+
+Expanding the square in the slit-$j$ term of @eq-transmission writes its exponent
+as a single quadratic $-a_c y^2 + b_j y + c_0$ with
+
+$$
+a_c = \frac{1}{4\alpha_1} + \frac{1}{2\beta^2},
+\qquad
+b_j = \frac{j\,y_s}{\beta^2},
+\qquad
+c_0 = -\frac{y_s^2}{2\beta^2}.
+$$ {#eq-combine}
+
+##### Evolution to the screen
+
+Convolve $\phi$ with the free kernel over $t_2$, writing
+$\lambda_2 \equiv i m / 2\hbar t_2$:
+
+$$
+\psi_{D,j}(y_D) = N_1 \sqrt{\frac{m}{2\pi i\hbar t_2}}
+\int dy\; e^{\lambda_2 (y_D - y)^2}\, e^{-a_c y^2 + b_j y + c_0}.
+$$
+
+The $y$-integrand is again $-p\,y^2 + q_j y + r$ with
+
+$$
+p = a_c - \lambda_2, \qquad
+q_j = b_j - 2\lambda_2 y_D, \qquad
+r = \lambda_2 y_D^2 + c_0 .
+$$ {#eq-pqr}
+
+Since $\lambda_2$ is pure imaginary, $\operatorname{Re} p = \operatorname{Re}(1/4\alpha_1) + 1/2\beta^2 > 0$
+and the integral converges. Applying the identity,
+
+$$
+\psi_{D,j}(y_D) =
+\underbrace{N_1 \sqrt{\frac{m}{2\pi i\hbar t_2}}\sqrt{\frac{\pi}{p}}\, e^{c_0}}_{\text{common to both slits}}
+\;\exp\!\left[\frac{q_j^2}{4p} + \lambda_2 y_D^2\right],
+$$ {#eq-psiDj}
+
+##### Summing the slits: envelope times fringes
+
+The screen amplitude is $\psi_D = \psi_{D,+} + \psi_{D,-}$. Expand
+$q_j^2 = b_j^2 - 4\lambda_2 y_D b_j + 4\lambda_2^2 y_D^2$. The $b_j^2$ piece is the
+same for both slits (it depends on $j^2$), and only the middle term carries the
+sign of $j$. Defining the single complex constant
+
+$$
+\kappa \equiv \frac{\lambda_2\, y_s}{\beta^2\, p},
+\qquad\text{so that}\qquad
+\frac{\lambda_2 y_D\, b_j}{p} = j\,\kappa\, y_D,
+$$
+
+the two slits sum to a hyperbolic cosine, $\psi_D(y_D) = 2\,\mathcal{N}(y_D)\cosh(\kappa y_D)$,
+where $\mathcal{N}$ gathers the common (non-$j$) factors. Taking the modulus
+squared and writing $\kappa = \kappa_r + i\kappa_i$, the identity
+$|\cosh(u + iv)|^2 = \tfrac12(\cosh 2u + \cos 2v)$ gives
+
+$$
+\boxed{\;I(y_D) = E(y_D)\cdot \frac{\cosh(2\kappa_r y_D) + \cos(2\kappa_i y_D)}{2}\;}
+$$ {#eq-intensity}
+
+The $\cos(2\kappa_i y_D)$ term is the interference; the $\cosh$ term and $E$ together
+form the single-slit envelope.
+
+##### The pattern
+
+Evaluating @eq-intensity on a grid gives the closed-form pattern below. The
+fringe spacing measured from the peaks matches @eq-spacing.
+
+```{python}
+#| label: fig-screen-analytic
+#| fig-cap: "Closed-form Gaussian-slit intensity on the detection screen. Equally spaced fringes sit under a smooth Gaussian envelope."
+#| code-fold: true
+import numpy as np
+import matplotlib.pyplot as plt
+import dslit
+
+yD = np.linspace(-60e-6, 60e-6, 4000)
+psi_p, psi_m = dslit.per_slit_analytic(yD)
+I = dslit.screen_intensity(psi_p, psi_m, mu=1.0)
+I = I / I.max()
+fr, env = dslit.fringe_spacing()
+
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(yD * 1e6, I, color="#185FA5", lw=1.5)
+ax.set_xlabel(r"$y_D$ on detection screen [$\mu$m]")
+ax.set_ylabel("normalized intensity")
+ax.set_title(r"Gaussian-slit fringes, $\Delta = \lambda L_2/(a+b)$"
+             f" = {fr*1e6:.2f} µm")
+plt.show()
+```
+
+```{python}
+#| label: spacing-check
+#| code-fold: true
+from scipy.signal import find_peaks
+
+peaks, _ = find_peaks(I, height=0.05)
+measured = np.median(np.diff(np.sort(yD[peaks])))
+print(f"predicted  lambda*L2/(a+b) = {fr*1e6:.3f} um")
+print(f"measured   peak spacing    = {measured*1e6:.3f} um")
+```
+
+## Up next
+
+We now have a beam that reaches the slits, and the fraction that gets
+through. In Part 3 we will solve the problem for two slits numerically,
+dropping the assumption of Gaussian-shaped slits. There is no analytical solution to this next problem.
+
+The full source for this series is on
+[GitHub](https://github.com/kareanra/physics-blog).
+The derivations, code, and prose are all mine. However, I did consult Claude to proofread and for help
+setting up the project and rendering equations.
