@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="380" viewBox="0 0 680 380" role="img">
+  <title>Doppler effect: wavefronts of a moving light source</title>
+  <desc>A light source moving to the right emits wavefronts that bunch together ahead of it (blueshift, higher frequency) and stretch apart behind it (redshift, lower frequency).</desc>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .t  { font-size: 14px; fill: #2C2C2A; }
+    .ts { font-size: 12px; fill: #5F5E5A; }
+    .th { font-size: 15px; font-weight: 600; fill: #2C2C2A; }
+    @media (prefers-color-scheme: dark){ .t,.th{fill:#E8E6DE;} .ts{fill:#B4B2A9;} }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+
+  <circle cx="220" cy="190" r="150" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="290" cy="190" r="120" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.55"/>
+  <circle cx="360" cy="190" r="90" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="430" cy="190" r="60" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.7"/>
+  <circle cx="500" cy="190" r="32" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.85"/>
+
+  <circle cx="516" cy="190" r="7" fill="#D64545"/>
+  <line x1="524" y1="190" x2="566" y2="190" stroke="#D64545" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text class="ts" x="545" y="182" text-anchor="middle">v</text>
+  <text class="ts" x="516" y="216" text-anchor="middle">source</text>
+
+  <text class="t" x="560" y="120" text-anchor="middle">blueshift</text>
+  <text class="ts" x="560" y="138" text-anchor="middle">crests bunched · higher f</text>
+  <text class="t" x="120" y="70" text-anchor="middle">redshift</text>
+  <text class="ts" x="120" y="88" text-anchor="middle">crests stretched · lower f</text>
+</svg>

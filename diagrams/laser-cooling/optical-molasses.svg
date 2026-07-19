@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="320" viewBox="0 0 680 320" role="img">
+  <title>Optical molasses: two counter-propagating red-detuned beams</title>
+  <desc>Two red-detuned laser beams point at each other. An atom moving right Doppler-shifts the opposing (right) beam onto resonance and absorbs more from it, giving a net force that opposes the velocity, a damping force minus beta v.</desc>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .t  { font-size: 14px; fill: #2C2C2A; }
+    .ts { font-size: 12px; fill: #5F5E5A; }
+    .th { font-size: 15px; font-weight: 600; fill: #2C2C2A; }
+    @media (prefers-color-scheme: dark){ .t,.th{fill:#E8E6DE;} .ts{fill:#B4B2A9;} }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+
+  <rect x="24" y="150" width="46" height="40" rx="4" fill="#D64545"/>
+  <text class="ts" x="47" y="210" text-anchor="middle">laser</text>
+  <rect x="610" y="150" width="46" height="40" rx="4" fill="#D64545"/>
+  <text class="ts" x="633" y="210" text-anchor="middle">laser</text>
+
+  <line x1="78" y1="170" x2="300" y2="170" stroke="#D64545" stroke-width="2" opacity="0.55" marker-end="url(#arrow)"/>
+  <line x1="602" y1="170" x2="380" y2="170" stroke="#D64545" stroke-width="3.5" marker-end="url(#arrow)"/>
+
+  <text class="ts" x="185" y="126" text-anchor="middle">redshifted · weaker push</text>
+  <text class="ts" x="495" y="126" text-anchor="middle">blueshifted onto resonance · stronger push</text>
+
+  <circle cx="340" cy="170" r="20" fill="#185FA5"/>
+  <line x1="364" y1="146" x2="408" y2="146" stroke="#5F5E5A" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text class="ts" x="386" y="138" text-anchor="middle">v</text>
+
+  <line x1="316" y1="196" x2="270" y2="196" stroke="#1D9E75" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <text class="ts" x="252" y="200" text-anchor="end">net force F = −βv</text>
+
+  <text class="th" x="340" y="285" text-anchor="middle">Optical molasses</text>
+  <text class="ts" x="340" y="304" text-anchor="middle">whichever way the atom drifts, the opposing beam is the one it absorbs</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="340" viewBox="0 0 680 340" role="img">
+  <title>Doppler cooling cycle (animated)</title>
+  <desc>An atom moving right absorbs a photon from a red-detuned laser opposing its motion, which slows it and excites it; the atom then re-emits a photon in a random direction and returns to the ground state. The absorption kicks always oppose the motion while the emission kicks average out, so the atom cools.</desc>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .t  { font-size: 14px; fill: #2C2C2A; }
+    .ts { font-size: 12px; fill: #5F5E5A; }
+    .th { font-size: 15px; font-weight: 600; fill: #2C2C2A; }
+    @media (prefers-color-scheme: dark){ .t,.th{fill:#E8E6DE;} .ts{fill:#B4B2A9;} }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+
+  <line x1="90" y1="170" x2="600" y2="170" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3 5"/>
+
+  <rect x="602" y="150" width="50" height="40" rx="4" fill="#D64545"/>
+  <text class="ts" x="627" y="210" text-anchor="middle">red-detuned</text>
+  <text class="ts" x="627" y="225" text-anchor="middle">laser</text>
+
+  <line x1="346" y1="150" x2="415" y2="150" stroke="#5F5E5A" stroke-width="1.6" marker-end="url(#arrow)">
+    <animate attributeName="x2" dur="4s" repeatCount="indefinite" values="415;415;388;388;415" keyTimes="0;0.28;0.31;0.97;1"/>
+  </line>
+  <text class="ts" x="392" y="142" text-anchor="middle">v</text>
+
+  <circle cx="320" cy="170" r="22" fill="#185FA5">
+    <animate attributeName="fill" dur="4s" repeatCount="indefinite" values="#185FA5;#185FA5;#C0392B;#C0392B;#185FA5;#185FA5" keyTimes="0;0.28;0.31;0.60;0.63;1"/>
+  </circle>
+
+  <circle cx="585" cy="170" r="7" fill="#EF9F27">
+    <animate attributeName="cx" dur="4s" repeatCount="indefinite" values="585;350;350;585;585" keyTimes="0;0.28;0.31;0.97;1"/>
+    <animate attributeName="opacity" dur="4s" repeatCount="indefinite" values="1;1;0;0;1" keyTimes="0;0.28;0.30;0.97;1"/>
+  </circle>
+
+  <circle cx="320" cy="170" r="7" fill="#EF9F27" opacity="0">
+    <animate attributeName="cx" dur="4s" repeatCount="indefinite" values="320;320;460;320;320" keyTimes="0;0.60;0.86;0.87;1"/>
+    <animate attributeName="cy" dur="4s" repeatCount="indefinite" values="170;170;70;170;170" keyTimes="0;0.60;0.86;0.87;1"/>
+    <animate attributeName="opacity" dur="4s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.60;0.63;0.83;0.86;1"/>
+  </circle>
+
+  <text class="ts" x="40" y="292">① photon absorbed: recoil opposes motion, so the atom slows</text>
+  <text class="ts" x="40" y="310">② atom is briefly excited (shown red)</text>
+  <text class="ts" x="40" y="328">③ photon re-emitted in a random direction; these kicks average to zero</text>
+</svg>

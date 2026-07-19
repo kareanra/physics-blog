@@ -20,6 +20,8 @@ then we'll dive into the cooling method and explain why it works.
 
 ### Atomic transitions and photon absorption
 
+![Atomic energy levels, absorption, and emission](../../diagrams/laser-cooling/doppler-cooling-energy-levels.svg)
+
 Atoms have various intrinsic energy levels that their electrons can occupy. These form a discrete
 ladder of levels, and electrons can jump up or down a rung. 
 Atoms in general can absorb a photon of a certain frequency, provided the photon's frequency
@@ -39,6 +41,8 @@ in space we'll want those head-on collisions to occur more frequently. How can w
 
 ### The Doppler effect
 
+![Doppler effect](../../diagrams/laser-cooling/doppler-effect-wavefronts.svg)
+
 The Doppler effect as applied to light waves and photons is a phenomenon that occurs from the point of view
 of an "observer" observing light traveling through space. If the light is traveling toward the observer,
 the observer will perceive an upward frequency shift as the wavefronts bunch up.
@@ -51,6 +55,8 @@ So... how can we exploit this and the above to cool a collection of atoms?
 If we have a laser that is shining light on the atoms from one direction,
 if we exactly match an atomic transition, we might be equally likely to speed up atoms
 (moving away from the laser) as slowing them down. Thus, no net cooling effect.
+
+![Laser detuning](../../diagrams/laser-cooling/red-detuning-resonance.svg)
 
 On the other hand, what if we tune the laser's frequency (photons' frequencies) to be a bit _below_
 the atom's transition energy (spacing between atomic energy levels)? In that case, it's far more likely
@@ -65,8 +71,12 @@ down even further, as the Doppler effect is less pronounced as the atoms get slo
 tuning the laser down, you can get those atoms extremely cold, and extremely close to absolute zero temperature. In
 the next post I'll walk through the math, which will only require high school-level geometry.
 
+![Doppler cooling cycle](../../diagrams/laser-cooling/doppler-cooling-cycle.svg)
+
 This can be extended to multiple lasers pointing in different, opposite and orthogonal directions. That way
 atoms moving away from one laser will be likely to absorb a photon from an opposite-pointing laser.
+
+![Optical molasses](../../diagrams/laser-cooling/optical-molasses.svg)
 
 The full source for this series is on
 [GitHub](https://github.com/kareanra/physics-blog).
