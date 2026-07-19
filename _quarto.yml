@@ -11,6 +11,10 @@ website:
   description: "Worked derivations, intuition, and reproducible code."
   site-url: "https://kareanra.github.io/physics-blog"
   repo-url: "https://github.com/kareanra/physics-blog"
+  open-graph:
+    image: "images/og-banner.png"
+  twitter-card:
+    image: "images/og-banner.png"
   navbar:
     left:
       - text: "Posts"
