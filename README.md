@@ -52,7 +52,8 @@ dslit.py                         consolidated physics module imported by all pos
 index.qmd                        blog listing
 about.qmd                        about page
 posts/_metadata.yml              shared post settings (code-fold, freeze)
-posts/double-slit-part1/         part 1: kernel + slit transmission
+posts/double-slit-part1/         part 1: conceptual background on diffraction, interference, and the quantum double-slit
+posts/double-slit-part2/         part 2: Schrödinger-equation derivation of the Gaussian-slit interference pattern
 .devcontainer/devcontainer.json  Codespaces env with Quarto + Python preinstalled
 .github/workflows/publish.yml    render + deploy to GitHub Pages on push to main
 .github/workflows/preview.yml    render a PR into a downloadable artifact

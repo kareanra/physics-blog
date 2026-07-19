@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="490" viewBox="0 0 680 490" role="img">
+  <title>Double-slit interference with light</title>
+  <desc>Plane waves strike a barrier with two narrow slits. Each slit radiates circular wavefronts, and the two sets overlap. Along directions where the wavefronts coincide the waves add, producing a row of bright fringes on the detector screen separated by dark bands.</desc>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .t  { font-size: 14px; fill: #2C2C2A; }
+    .ts { font-size: 12px; fill: #5F5E5A; }
+    .th { font-size: 14px; font-weight: 500; fill: #2C2C2A; }
+    @media (prefers-color-scheme: dark) {
+      .t, .th { fill: #E8E6DE; }
+      .ts { fill: #B4B2A9; }
+    }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+
+  <line x1="60" y1="70" x2="60" y2="410" stroke="#EF9F27" stroke-width="2" opacity="0.5"/>
+  <line x1="86" y1="70" x2="86" y2="410" stroke="#EF9F27" stroke-width="2" opacity="0.5"/>
+  <line x1="112" y1="70" x2="112" y2="410" stroke="#EF9F27" stroke-width="2" opacity="0.5"/>
+  <line x1="138" y1="70" x2="138" y2="410" stroke="#EF9F27" stroke-width="2" opacity="0.5"/>
+  <line x1="164" y1="70" x2="164" y2="410" stroke="#EF9F27" stroke-width="2" opacity="0.5"/>
+  <line x1="88" y1="240" x2="148" y2="240" stroke="#BA7517" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="250" y="40" width="10" height="158" fill="#5F5E5A"/>
+  <rect x="250" y="212" width="10" height="56" fill="#5F5E5A"/>
+  <rect x="250" y="282" width="10" height="158" fill="#5F5E5A"/>
+  <line x1="238" y1="205" x2="238" y2="275" stroke="#444441" stroke-width="1" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text class="ts" x="230" y="244" text-anchor="end">d</text>
+
+  <path d="M260 165 A40 40 0 0 1 260 245" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.85"/>
+  <path d="M260 125 A80 80 0 0 1 260 285" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.62"/>
+  <path d="M260 85 A120 120 0 0 1 260 325" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.42"/>
+  <path d="M260 45 A160 160 0 0 1 260 365" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.28"/>
+
+  <path d="M260 235 A40 40 0 0 1 260 315" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.85"/>
+  <path d="M260 195 A80 80 0 0 1 260 355" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.62"/>
+  <path d="M260 155 A120 120 0 0 1 260 395" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.42"/>
+  <path d="M260 115 A160 160 0 0 1 260 435" fill="none" stroke="#EF9F27" stroke-width="1.5" opacity="0.28"/>
+
+  <line x1="260" y1="240" x2="512" y2="240" stroke="#888780" stroke-width="0.5" stroke-dasharray="5 4"/>
+  <line x1="260" y1="240" x2="512" y2="188" stroke="#888780" stroke-width="0.5" stroke-dasharray="5 4"/>
+  <line x1="260" y1="240" x2="512" y2="292" stroke="#888780" stroke-width="0.5" stroke-dasharray="5 4"/>
+
+  <rect x="512" y="231" width="8" height="18" fill="#EF9F27" opacity="0.9"/>
+  <rect x="512" y="179" width="8" height="18" fill="#EF9F27" opacity="0.68"/>
+  <rect x="512" y="283" width="8" height="18" fill="#EF9F27" opacity="0.68"/>
+  <rect x="512" y="127" width="8" height="18" fill="#EF9F27" opacity="0.4"/>
+  <rect x="512" y="335" width="8" height="18" fill="#EF9F27" opacity="0.4"/>
+  <rect x="512" y="75" width="8" height="18" fill="#EF9F27" opacity="0.2"/>
+  <rect x="512" y="387" width="8" height="18" fill="#EF9F27" opacity="0.2"/>
+  <line x1="520" y1="40" x2="520" y2="440" stroke="#5F5E5A" stroke-width="2"/>
+
+  <text class="t" x="112" y="462" text-anchor="middle">incident plane wave</text>
+  <line x1="250" y1="34" x2="205" y2="28" stroke="#888780" stroke-width="0.5" stroke-dasharray="4 4"/>
+  <text class="ts" x="200" y="26" text-anchor="end">double slit (separation d)</text>
+  <text class="ts" x="372" y="26" text-anchor="middle">overlapping wavefronts</text>
+  <text class="t" x="520" y="462" text-anchor="middle">detector screen</text>
+  <text class="ts" x="532" y="243" text-anchor="start">bright fringes</text>
+</svg>
