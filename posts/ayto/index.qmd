@@ -110,10 +110,13 @@ $$
 p(\mathrm{N}) = {10 \choose N}\frac{\left[\frac{(10 - N)!}{e}\right]}{10!} 
 $$
 
-So the probability of getting all of them correct after fixing $N$ couples is the inverse of this
+Given that we observed $N$ correct, the true matching is equally likely to be any one of these
+${10 \choose N}\left[\frac{(10 - N)!}{e}\right]$ permutations - we have no way to tell them apart. So the best we can
+do on the next guess is pick one of them, which means the probability of getting all of them correct after fixing
+$N$ couples is just one divided by how many candidates are still in play:
 
 $$
-p(10 | N) = \frac{10!}{ {10 \choose N}\left[\frac{(10 - N)!}{e}\right] }
+p(10 | N) = \frac{1}{ {10 \choose N}\left[\frac{(10 - N)!}{e}\right] }
 $$
 
 ## Step 5
