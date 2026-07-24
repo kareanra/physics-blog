@@ -14,18 +14,22 @@ bibliography: ../../references.bib
 
 # The quantum double-slit experiment
 
-## Part 1: the background
-
-In this series we'll be using numerical and analytical methods for simulating
+In this series we'll eventually be using numerical and analytical methods for simulating 
 and solving for the result of the famous quantum mechanical [double-slit experiment](https://en.wikipedia.org/wiki/Double-slit_experiment),
-performed with an electron and solved in a variety of different ways. As this is an advanced topic,
-having some familiarity with calculus and perhaps basic classical [Lagrangian] mechanics will help a great deal.
-That said, the accompanying derivations and code can be skipped if need be, and some calculations are omitted and left 
-as an exercise for the reader in any case (cue sinister laugh).
+performed with an electron and solved in a variety of different ways. 
 
 I like this problem a lot, as it illustrates some really interesting quantum phenomena 
 (wave-particle duality, superposition, interference, uncertainty, measurement), and you can layer on the complexity, 
 as we'll do here in discrete and progressive steps.
+
+I've separated this series into different posts for a reason: Part 1 has basic prerequisites and the others require 
+a significant background in math or physics concepts that are taught at the upper-undergraduate or graduate level.
+
+## Part 1: the background
+
+This first part is very light on the math. We'll try to build an intuition for the experiment using analogies with 
+light, then we'll look at electrons. My hope is that you'll come away with some understanding of
+wave-particle duality and "the observer effect" in quantum mechanics.
 
 ### Classical picture: light
 
@@ -63,19 +67,28 @@ the result on your own.
 ![Waves spreading out and overlapping after passing through two slits.](../../diagrams/double-slit-part1/double-slit-interference.svg)
 
 Diffraction causes the bending of the light going through each slit, and interference causes the regions of high and
-low intensity on the detector screen.
+low intensity on the detector screen. The end result is these "fringes" you see on the detector screen. The fringes
+themselves are physically where the waves of diffracted (spread-out) light overlapped and interfered _constructively_.
+The regions in between are where no light arrived because the waves interfered _destructively_ and canceled out.
 
 ### Quantum picture: also with light
 
-As I said before, light has both particle-like and wave-like behavior. Let's focus on the particle-like properties of
-light now. When you dial down the intensity (brightness) of light, you're releasing fewer photons from the light source
-over a certain timespan. You can make it so the light source is so dim that individual photons go through
-at such a slow rate that each photon goes through the slit and hits the detector screen before the next photon starts
-its journey. So how would we expect the light to behave? What would the pattern on the detector look like? 
+Let's now focus on the particle-like properties of light. The particle behavior of light, by the way, is inherently 
+"quantum." No classical theory
+can explain phenomena like the photoelectric effect or other experiments where photons' particle-like behaviors 
+dominate. So just remember this: light's "quantumness" is roughly indicated by how much it's behaving like a particle.
+For matter - including the electrons we'll be dealing with - the opposite is true: the wave behavior only comes on
+when quantum effects dominate.
+
+Aside: this second statement is crucial to understanding the profundity of the results we're 
+going to see. Because it turns out that the quantumness disappears whenever you try to figure out the particle's
+state ("observe" it).
 
 Let's make our detector screen a theoretical, 2-dimensional screen that can detect where a single photon lands. When
 the light is on full blast like in the above experiment, the detector will detect a large number of photons over a
-given (short) timespan. The resulting pattern will exhibit wave interference, as we described before.
+given (short) timespan. The resulting pattern will exhibit wave interference, as we described before: you'll see
+fringes with bright areas and dark areas. This is fully classical so far. Waves diffract when they hit the slits,
+and interfere when they recombine.
 
 However, now dial down the light intensity to be sufficiently low that single photons arrive sequentially at the 
 detector screen, passing through either the top or bottom slit (or... both or neither, as we'll see). 
@@ -88,14 +101,66 @@ BUT, we in fact _do_ see the interference fringes on the screen, provided we don
 slit each photon went through. I'll get to the mathematics and maybe even philosophy of what happens when the
 observer (us) detects which slit the photon passed through. But for now, take it as a given that this is the case.
 
-We'll show mathematically that we get the same interference pattern with individual electrons. Disclaimer: the
-derivations are pretty advanced and you can skip to the resulting plots to see what actually appears on the screen.
+Let's stop for a moment and appreciate how crazy this is: individual photons shot at the screen, one by one and, 
+result in that interference pattern. If the photon went through a slit, there's no second photon to
+overlap or recombine with. How is it possible for there to be interference? As we'll eventually see,
+the photon essentially went through _both_ slits simultaneously, and interfered with _itself_ before hitting the 
+detector. But wait, there's more! If you somehow determine whether each photon went through the top or bottom slit,
+the pattern disappears, and we get that classical two-smudge pattern!
 
-One note about measurement: even if we were to allow any quantum experiment exhibiting this interference phenomenon
-to be carried out without actually measuring anything, if it were possible to - after the fact - deduce the trajectory
-of our quantum particle, there no interference pattern appears. I find this profound and fascinating. To illustrate 
-this I'll borrow a thought experiment from Richard Feynman's lecture notes on quantum mechanics. Feel free to skip
-this next section if it isn't of interest, or is too advanced. It does require some prior physics knowledge.
+_Note: if we're being pedantic, we might say that the path the light took is indeterminate if you don't measure it, and
+that it's the trajectories or possible paths that interfere. I, for one, don't think this makes things any
+less magical. But I also think my previous description is better for our layperson understanding of this_.
+
+### Quantum picture: electrons
+
+Let's now turn to the actual experiment of interest: a double-slit setup with an electron beam instead of
+a light beam. Now prior to quantum theory, there were two disparate theories to describe particles and waves.
+These are (somewhat loosely) the fields of classical mechanics and wave mechanics. Whether you're dealing with 
+sound wave propagation, light, or a spreading circular wave in water, you use a different set of equations
+than if you're looking at particles with mass. The equations of motion in both cases give you the state of the system
+at some time $t$ in the future, provided you know the initial state of your particle(s) or wave(s).
+
+This is adequate for almost everything we interact with in our daily lives. Single electrons, however,
+are so tiny and interact so differently with each other and light or matter that we need quantum theory
+to calculate their trajectories and interactions.
+
+And so when we fire electrons at the screen, we might know what to expect: fringes on the detector if quantumness
+was preserved, or smudges with no fringes if the quantumness disappeared. This is indeed the case! If we don't
+observe which slit the electron went through, we see fringes. If we somehow figure out the trajectory and which slit
+the electron passed through, the quantumness and fringes disappear!
+
+## The nature of measurement and uncertainty
+
+As I said before, wave-like properties of all matter are inherently quantum mechanical. Quantum theory predicted this,
+and there's no way to explain the double-slit experiment in terms of classical particles or trajectories.
+The interference pattern, being the fingerprint of wave-like behavior, is therefore also an indication of
+"quantumness." And that's the thing we see disappearing when we make an "observation."
+
+What constitutes a measurement or observation? This is tricky. You could think of it in this context as altering
+the trajectory physically by e.g. blocking the lower slit. Or light from a microscope shining on the electron at all
+times throughout its journey. 
+But more interesting is the case of designing an extremely
+sensitive apparatus to detect which slit the electron went through without significantly altering its trajectory. 
+Since electrons carry charge, this might be an 
+instrument placed right after the slits and closer to the top slit that detects the strength of its electric field to
+determine the slit it went through. But the details and mechanism don't actually matter. **There is no way
+to design an instrument that can detect which slit the electron went through in this experiment and preserve 
+its quantumness.** And there's even a way of quantifying how "strong" or "weak" a measurement is, and it's inversely
+related to the quantum decoherence - that is, the weaker the measurement, the more the quantumness is preserved.
+
+So the main takeaway here is that if we know which slit the electron traveled through, it will behave like a particle. 
+If we don't, it will behave like a wave. 
+
+For the interested reader, there's actually 
+a much stronger statement here: the _very ability_ even in principle to know what a particle's trajectory is or was
+alters that trajectory. And there's truly no way to "cheat" and skirt this universal principle, even by being extremely
+clever with our experimental setup. It's simply not possible to preserve the "quantumness" and have the information
+we're seeking. I find this profound and fascinating.
+
+To drive the point home I'll borrow a thought experiment from Richard Feynman's lecture notes on quantum mechanics. 
+Feel free to skip this next section if it isn't of interest, or is too much to grasp. 
+It does require some prior physics knowledge.
 
 ::: {.callout-note collapse="true"}
 ### Feynman's scattering crystal
@@ -147,10 +212,11 @@ For reference, I'm quoting from his third section of [Caltech lecture notes](htt
 > scattering, what have the other atoms got to do with it? Nothing, of course. The scattering is exactly the same 
 > as that from a single atom.
 
-The main takeaway here is that if there were in principle a way to determine a particle's trajectory
-that will alter its trajectory by virtue of "wavefunction collapse" (more on this mechanism later).
-
 :::
+
+If you have an appetite for math and want to peak under the cosmic hood, feel free to continue
+with this series. If not, thanks for stopping by! I hope you feel a little more informed and maybe a little excited
+about the universe.
 
 ## Up next
 
