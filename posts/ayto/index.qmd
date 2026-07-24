@@ -113,7 +113,7 @@ $$
 So the probability of getting all of them correct after fixing $N$ couples is the inverse of this
 
 $$
-p(10 | N) = \frac{10!}{{10 \choose N}\left[\frac{(10 - N)!}{e}\right]}
+p(10 | N) = \frac{10!}{ {10 \choose N}\left[\frac{(10 - N)!}{e}\right] }
 $$
 
 ## Step 5
