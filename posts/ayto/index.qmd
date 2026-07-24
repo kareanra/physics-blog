@@ -30,12 +30,12 @@ the text of which I'll quote here:
 >
 > Onto the problem:
 >
->**The first matching ceremony just yielded n correct matches. In the absence of any additional information, and using 
+>**The first matching ceremony just yielded N correct matches. In the absence of any additional information, and using
 > an optimal strategy (they're trying to win), what is the probability that they will get all 10 correct on the 
 > following try?**
 
 If you're familiar with probability theory, particularly combinations and permutations with fixed points, you may
-be able to solve this. It's pretty tricky! I had to something up to get the final result.
+be able to solve this. It's pretty tricky! I had to look something up to get the final result.
 
 Here's a hint. Given a sequence of $n$ objects, the total number of ways you can permute them where none of the
 objects were in their initial position - defined as $D_n$ - is
@@ -64,14 +64,14 @@ $$
 \frac{1}{10!} = \frac{1}{3628800} \approx 0.0000003 
 $$
 
-giving a 00003% chance. That's vanishingly small!
+giving a 0.00003% chance. That's vanishingly small!
 
 Exercise for the reader: can you get 9 out of 10 couples right? Why or why not?
 
 ## Step 2
 
 Using the formula from before, the number of ways to get none of the matches correct is the number
-of permutations with none of them in them in their original (correct) spots:
+of permutations with none of them in their original (correct) spots:
 
 $$
 N(0) = D_{10} = \left[\frac{10!}{e}\right] = 1334961
@@ -107,7 +107,7 @@ we'll want to take a guess at which $N$ were correct and fix $N$ couples for the
 to choose $N$ from a group of 10 couples then permute the rest with no correct matches is
 
 $$
-p(\mathrm{N}) = {10 \choose N}\frac{\left[\frac{(10 - N)!}{e}\right]}{10!} 
+N(\mathrm{N}) = {10 \choose N}\left[\frac{(10 - N)!}{e}\right]
 $$
 
 Given that we observed $N$ correct, the true matching is equally likely to be any one of these
@@ -125,7 +125,7 @@ Finally-finally, we'll plot the probabilities for getting all 10 right given $N$
 
 ```{python}
 #| label: fig-schematic
-#| fig-cap: "Probability of getting exactly N correct in a single random matching."
+#| fig-cap: "Probability of getting all correct after N correct in the previous round."
 #| code-fold: true
 import matplotlib.pyplot as plt
 import ayto
