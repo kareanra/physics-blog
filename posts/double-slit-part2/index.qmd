@@ -5,7 +5,7 @@ description: >
   Gaussian-aperture slits, deriving a closed-form interference pattern via
   complex Gaussian integrals, and checking the predicted fringe spacing
   numerically.
-date: 2026-07-19
+date: 2026-07-16
 author: "Kyle Arean-Raines"
 categories: [quantum mechanics, Schrödinger equation, Gaussian integrals, python]
 toc: true
