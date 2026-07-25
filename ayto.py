@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from math import comb, factorial, floor
 
+from matplotlib.axes import Axes
+
 EULERS_CONSTANT = 2.718281828459045
 
 def probability(n_correct: int, n: int = 10) -> float:
@@ -9,7 +11,7 @@ def probability(n_correct: int, n: int = 10) -> float:
     derangements = floor((factorial(n - n_correct) / EULERS_CONSTANT) + 1/2)
     return 1 / (n_choose_n_correct * derangements)
 
-def plot_probabilities(ax, n: int = 10):
+def plot_probabilities(ax: Axes, n: int = 10) -> Axes:
     xs = [k for k in range(n + 1) if k not in (n - 1, n)]
     ys = [probability(k, n) for k in xs]
     ax.plot(xs, ys, color="#5F5E5A")

@@ -96,9 +96,12 @@ $$
 p(1) = {10 \choose 1} \frac{\left[\frac{9!}{e}\right]}{10!} \approx .368 = 36.8\%
 $$
 
-That's the same answer we got above! Weird - so the probability of getting one match is the same as the
-probability of getting no matches, and **the result doesn't depend on the size of the group.** The answer
-would be the same even if there were 100 people being matched up.
+That's the same answer we got above, to every digit that matters! Weird - so the probability of getting one
+match is (almost exactly) the same as the probability of getting no matches. In fact they're not *quite*
+equal - using the exact series for $D_n$, they differ by precisely $\frac{1}{10!} \approx 0.0000003$, invisible
+at this precision - and **the result barely depends on the size of the group.** Both probabilities converge
+to $e^{-1}$ as the group size grows, and they get there so fast that the answer would look identical even if
+there were 100 people being matched up.
 
 ## Step 4
 
