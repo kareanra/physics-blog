@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="500" viewBox="0 0 560 500" role="img">
+  <title>Encoding a pairing of ten couples as a permutation</title>
+  <desc>Ten women in a fixed order face ten men in one shuffled order. Each woman's number is her fixed position; each man's number is his true partner. Two rows match (green) where the man faces his own partner; the other eight do not (red).</desc>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .t  { font-size: 14px; fill: #2C2C2A; }
+    .ts { font-size: 12px; fill: #5F5E5A; }
+    .th { font-size: 15px; font-weight: 600; fill: #2C2C2A; }
+    @media (prefers-color-scheme: dark){ .t,.th{fill:#E8E6DE;} .ts{fill:#B4B2A9;} }
+  </style>
+
+  <text class="th" x="280" y="26" text-anchor="middle">Encoding a pairing: women fixed, men permuted</text>
+  <text class="ts" x="280" y="45" text-anchor="middle">each man's number is his true partner; a match is a man facing his own partner</text>
+
+  <text class="t" x="120" y="80" text-anchor="middle">women (fixed order)</text>
+  <text class="t" x="430" y="80" text-anchor="middle">men (this shuffle)</text>
+
+  <line x1="154" y1="100" x2="406" y2="100" stroke="#D64545" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="280" cy="100" r="7" fill="#D64545"/>
+  <circle cx="140" cy="100" r="13" fill="#F0E8F2" stroke="#9C6FA6" stroke-width="1.5"/>
+  <text x="140" y="104" text-anchor="middle" font-size="12" fill="#2C2C2A">1</text>
+  <text class="ts" x="120" y="104" text-anchor="end">Susie</text>
+  <circle cx="420" cy="100" r="13" fill="#E4EDF6" stroke="#3E6DA3" stroke-width="1.5"/>
+  <text x="420" y="104" text-anchor="middle" font-size="12" fill="#2C2C2A">3</text>
+  <path d="M154 96 L160 100 L154 104 Z" fill="#9C6FA6"/>
+  <path d="M406 96 L400 100 L406 104 Z" fill="#3E6DA3"/>
+  <line x1="154" y1="136" x2="406" y2="136" stroke="#2E9E5B" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="280" cy="136" r="7" fill="#2E9E5B"/>
+  <circle cx="140" cy="136" r="13" fill="#F0E8F2" stroke="#9C6FA6" stroke-width="1.5"/>
+  <text x="140" y="140" text-anchor="middle" font-size="12" fill="#2C2C2A">2</text>
+  <text class="ts" x="120" y="140" text-anchor="end">Esther</text>
+  <circle cx="420" cy="136" r="13" fill="#E4EDF6" stroke="#3E6DA3" stroke-width="1.5"/>
+  <text x="420" y="140" text-anchor="middle" font-size="12" fill="#2C2C2A">2</text>
+  <path d="M154 132 L160 136 L154 140 Z" fill="#9C6FA6"/>
+  <path d="M406 132 L400 136 L406 140 Z" fill="#3E6DA3"/>
+  <line x1="154" y1="172" x2="406" y2="172" stroke="#D64545" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="280" cy="172" r="7" fill="#D64545"/>
+  <circle cx="140" cy="172" r="13" fill="#F0E8F2" stroke="#9C6FA6" stroke-width="1.5"/>
+  <text x="140" y="176" text-anchor="middle" font-size="12" fill="#2C2C2A">3</text>
+  <text class="ts" x="120" y="176" text-anchor="end">Ethyl</text>
+  <circle cx="420" cy="172" r="13" fill="#E4EDF6" stroke="#3E6DA3" stroke-width="1.5"/>
+  <text x="420" y="176" text-anchor="middle" font-size="12" fill="#2C2C2A">1</text>
+  <path d="M154 168 L160 172 L154 176 Z" fill="#9C6FA6"/>
+  <path d="M406 168 L400 172 L406 176 Z" fill="#3E6DA3"/>
+  <line x1="154" y1="208" x2="406" y2="208" stroke="#D64545" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="280" cy="208" r="7" fill="#D64545"/>
+  <circle cx="140" cy="208" r="13" fill="#F0E8F2" stroke="#9C6FA6" stroke-width="1.5"/>
+  <text x="140" y="212" text-anchor="middle" font-size="12" fill="#2C2C2A">4</text>
+  <text class="ts" x="120" y="212" text-anchor="end">Methyl</text>
+  <circle cx="420" cy="208" r="13" fill="#E4EDF6" stroke="#3E6DA3" stroke-width="1.5"/>
+  <text x="420" y="212" text-anchor="middle" font-size="12" fill="#2C2C2A">5</text>
+  <path d="M154 204 L160 208 L154 212 Z" fill="#9C6FA6"/>
+  <path d="M406 204 L400 208 L406 212 Z" fill="#3E6DA3"/>
+  <line x1="154" y1="244" x2="406" y2="244" stroke="#D64545" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="280" cy="244" r="7" fill="#D64545"/>
+  <circle cx="140" cy="244" r="13" fill="#F0E8F2" stroke="#9C6FA6" stroke-width="1.5"/>
+  <text x="140" y="248" text-anchor="middle" font-size="12" fill="#2C2C2A">5</text>
+  <circle cx="420" cy="244" r="13" fill="#E4EDF6" stroke="#3E6DA3" stroke-width="1.5"/>
+  <text x="420" y="248" text-anchor="middle" font-size="12" fill="#2C2C2A">4</text>
+  <path d="M154 240 L160 244 L154 248 Z" fill="#9C6FA6"/>
+  <path d="M406 240 L400 244 L406 248 Z" fill="#3E6DA3"/>
+  <line x1="154" y1="280" x2="406" y2="280" stroke="#2E9E5B" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="280" cy="280" r="7" fill="#2E9E5B"/>
+  <circle cx="140" cy="280" r="13" fill="#F0E8F2" stroke="#9C6FA6" stroke-width="1.5"/>
+  <text x="140" y="284" text-anchor="middle" font-size="12" fill="#2C2C2A">6</text>
+  <circle cx="420" cy="280" r="13" fill="#E4EDF6" stroke="#3E6DA3" stroke-width="1.5"/>
+  <text x="420" y="284" text-anchor="middle" font-size="12" fill="#2C2C2A">6</text>
+  <path d="M154 276 L160 280 L154 284 Z" fill="#9C6FA6"/>
+  <path d="M406 276 L400 280 L406 284 Z" fill="#3E6DA3"/>
+  <line x1="154" y1="316" x2="406" y2="316" stroke="#D64545" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="280" cy="316" r="7" fill="#D64545"/>
+  <circle cx="140" cy="316" r="13" fill="#F0E8F2" stroke="#9C6FA6" stroke-width="1.5"/>
+  <text x="140" y="320" text-anchor="middle" font-size="12" fill="#2C2C2A">7</text>
+  <circle cx="420" cy="316" r="13" fill="#E4EDF6" stroke="#3E6DA3" stroke-width="1.5"/>
+  <text x="420" y="320" text-anchor="middle" font-size="12" fill="#2C2C2A">8</text>
+  <path d="M154 312 L160 316 L154 320 Z" fill="#9C6FA6"/>
+  <path d="M406 312 L400 316 L406 320 Z" fill="#3E6DA3"/>
+  <line x1="154" y1="352" x2="406" y2="352" stroke="#D64545" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="280" cy="352" r="7" fill="#D64545"/>
+  <circle cx="140" cy="352" r="13" fill="#F0E8F2" stroke="#9C6FA6" stroke-width="1.5"/>
+  <text x="140" y="356" text-anchor="middle" font-size="12" fill="#2C2C2A">8</text>
+  <circle cx="420" cy="352" r="13" fill="#E4EDF6" stroke="#3E6DA3" stroke-width="1.5"/>
+  <text x="420" y="356" text-anchor="middle" font-size="12" fill="#2C2C2A">9</text>
+  <path d="M154 348 L160 352 L154 356 Z" fill="#9C6FA6"/>
+  <path d="M406 348 L400 352 L406 356 Z" fill="#3E6DA3"/>
+  <line x1="154" y1="388" x2="406" y2="388" stroke="#D64545" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="280" cy="388" r="7" fill="#D64545"/>
+  <circle cx="140" cy="388" r="13" fill="#F0E8F2" stroke="#9C6FA6" stroke-width="1.5"/>
+  <text x="140" y="392" text-anchor="middle" font-size="12" fill="#2C2C2A">9</text>
+  <circle cx="420" cy="388" r="13" fill="#E4EDF6" stroke="#3E6DA3" stroke-width="1.5"/>
+  <text x="420" y="392" text-anchor="middle" font-size="12" fill="#2C2C2A">10</text>
+  <path d="M154 384 L160 388 L154 392 Z" fill="#9C6FA6"/>
+  <path d="M406 384 L400 388 L406 392 Z" fill="#3E6DA3"/>
+  <line x1="154" y1="424" x2="406" y2="424" stroke="#D64545" stroke-width="1.6" opacity="0.45"/>
+  <circle cx="280" cy="424" r="7" fill="#D64545"/>
+  <circle cx="140" cy="424" r="13" fill="#F0E8F2" stroke="#9C6FA6" stroke-width="1.5"/>
+  <text x="140" y="428" text-anchor="middle" font-size="12" fill="#2C2C2A">10</text>
+  <circle cx="420" cy="424" r="13" fill="#E4EDF6" stroke="#3E6DA3" stroke-width="1.5"/>
+  <text x="420" y="428" text-anchor="middle" font-size="12" fill="#2C2C2A">7</text>
+  <path d="M154 420 L160 424 L154 428 Z" fill="#9C6FA6"/>
+  <path d="M406 420 L400 424 L406 428 Z" fill="#3E6DA3"/>
+
+  <circle cx="150" cy="464" r="7" fill="#2E9E5B"/>
+  <text class="ts" x="164" y="468" text-anchor="start">correct match — 2</text>
+  <circle cx="320" cy="464" r="7" fill="#D64545"/>
+  <text class="ts" x="334" y="468" text-anchor="start">incorrect — 8</text>
+  <text class="ts" x="280" y="490" text-anchor="middle">shuffling the men gives all 10! = 3,628,800 pairings</text>
+</svg>

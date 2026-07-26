@@ -51,13 +51,15 @@ Yes that's $e$ as in Euler's number! It appears in so many different fields, and
 
 We'll now work toward calculating the probability of getting none of the matches correct.
 
-Imagine you line up all 10 women, each facing forward [diagram]. Next choose some random ordering
+Imagine you line up all 10 women, each facing forward. Next choose some random ordering
 for the men. Each man will face one of the women, with some small probability that it's their match. The point
 here is that we can encode a pairing of 10 couples by a single sequence if we fix the position of each woman for the
 whole calculation. So Susie is always first in line, then Esther, then Ethyl, then Methyl, etc. Shuffling (permuting)
 just the men can give all possible pairings. How many are there?
 
-It's the number of ways to permute 10 objects, or 10! (factorial: 10 times 9 times 8... all the way to 1). Only one of
+![Pairing permutation with 2 correct out of 10](../../diagrams/ayto/pairing-permutation.svg)
+
+It's the number of ways to permute 10 objects, or $10!$ (factorial: 10 times 9 times 8... all the way to 1). Only one of
 these permutations contains all the correct matches. So the probability of getting it right with a random ordering is
 
 $$
@@ -124,7 +126,8 @@ $$
 
 ## Step 5
 
-Finally-finally, we'll plot the probabilities for getting all 10 right given $N$ correct matches.
+Finally-finally, we'll do some plots, first of the probabilities for getting all 10 right given $N$ correct matches;
+then the probabilities of getting all correct as a function of the size of the group.
 
 ```{python}
 #| label: fig-schematic
@@ -134,7 +137,19 @@ import matplotlib.pyplot as plt
 import ayto
 
 fig, ax = plt.subplots(figsize=(8, 4.2))
-ayto.plot_probabilities(ax)
+ayto.plot_probability_versus_n_correct(ax)
+plt.show()
+```
+
+```{python}
+#| label: fig-schematic
+#| fig-cap: "Probability of getting all correct for a group of size N."
+#| code-fold: true
+import matplotlib.pyplot as plt
+import ayto
+
+fig, ax = plt.subplots(figsize=(8, 4.2))
+ayto.plot_probability_of_all_versus_n(ax)
 plt.show()
 ```
 

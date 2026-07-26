@@ -11,8 +11,14 @@ def probability(n_correct: int, n: int = 10) -> float:
     derangements = floor((factorial(n - n_correct) / EULERS_CONSTANT) + 1/2)
     return 1 / (n_choose_n_correct * derangements)
 
-def plot_probabilities(ax: Axes, n: int = 10) -> Axes:
+def plot_probability_versus_n_correct(ax: Axes, n: int = 10) -> Axes:
     xs = [k for k in range(n + 1) if k not in (n - 1, n)]
     ys = [probability(k, n) for k in xs]
+    ax.plot(xs, ys, color="#5F5E5A")
+    return ax
+
+def plot_probability_of_all_versus_n(ax: Axes) -> Axes:
+    xs = [n for n in range(1, 11)]
+    ys = [1/factorial(n) for n in xs]
     ax.plot(xs, ys, color="#5F5E5A")
     return ax
