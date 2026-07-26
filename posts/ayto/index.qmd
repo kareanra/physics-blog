@@ -142,7 +142,7 @@ plt.show()
 ```
 
 ```{python}
-#| label: fig-schematic
+#| label: fig-schematic-2
 #| fig-cap: "Probability of getting all correct for a group of size N."
 #| code-fold: true
 import matplotlib.pyplot as plt
