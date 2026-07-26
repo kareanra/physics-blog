@@ -46,7 +46,10 @@ class NewsletterStack(Stack):
                 self,
                 f"DkimRecord{i}",
                 zone=zone,
-                record_name=record.name,
+                # Trailing dot forces CDK to treat this as already fully
+                # qualified -- without it, record.name (which already ends in
+                # the zone's domain) got the zone name appended a second time.
+                record_name=f"{record.name}.",
                 domain_name=record.value,
                 ttl=Duration.hours(1),
             )
