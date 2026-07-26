@@ -7,6 +7,11 @@ _ses = boto3.client("sesv2")
 
 FROM_ADDRESS = os.environ.get("SES_FROM_ADDRESS", "")
 FROM_NAME = os.environ.get("SES_FROM_NAME", "Computational Physics Notes")
+# Without this, SES authorizes ses:SendEmail against an identity derived from
+# the FromEmailAddress string itself (e.g. "identity/news@sub.example.com"),
+# not the verified domain identity our IAM policy actually grants -- causing
+# an AccessDenied even though the domain is verified and IAM looks correct.
+SES_IDENTITY_ARN = os.environ.get("SES_IDENTITY_ARN", "")
 
 
 def send(
@@ -29,6 +34,7 @@ def send(
 
     _ses.send_email(
         FromEmailAddress=f"{FROM_NAME} <{FROM_ADDRESS}>",
+        FromEmailAddressIdentityArn=SES_IDENTITY_ARN,
         Destination={"ToAddresses": [to_address]},
         Content={"Raw": {"Data": msg.as_bytes()}},
     )

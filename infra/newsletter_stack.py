@@ -115,10 +115,12 @@ class NewsletterStack(Stack):
 
         api_base_url = f"https://api.{mail_subdomain}"
         from_address = f"news@{mail_subdomain}"
+        ses_identity_arn = f"arn:aws:ses:{self.region}:{self.account}:identity/{mail_subdomain}"
         base_env = {
             "SITE_URL": site_url,
             "SES_FROM_ADDRESS": from_address,
             "SES_FROM_NAME": "Computational Physics Notes",
+            "SES_IDENTITY_ARN": ses_identity_arn,
         }
 
         def make_function(id_: str, handler_dir: str, env: dict, timeout: Duration, memory: int = 128):
@@ -173,7 +175,7 @@ class NewsletterStack(Stack):
 
         ses_send_statement = iam.PolicyStatement(
             actions=["ses:SendEmail", "ses:SendRawEmail"],
-            resources=[f"arn:aws:ses:{self.region}:{self.account}:identity/{mail_subdomain}"],
+            resources=[ses_identity_arn],
         )
         subscribe_fn.add_to_role_policy(ses_send_statement)
         digest_fn.add_to_role_policy(ses_send_statement)
@@ -238,4 +240,4 @@ class NewsletterStack(Stack):
 
         CfnOutput(self, "ApiBaseUrl", value=api_base_url)
         CfnOutput(self, "SubscribersTableName", value=subscribers_table.table_name)
-        CfnOutput(self, "SesIdentityArn", value=f"arn:aws:ses:{self.region}:{self.account}:identity/{mail_subdomain}")
+        CfnOutput(self, "SesIdentityArn", value=ses_identity_arn)
