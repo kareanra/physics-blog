@@ -51,10 +51,21 @@ _quarto.yml                      site + build config (execute-dir: project)
 dslit.py                         consolidated physics module imported by all posts
 index.qmd                        blog listing
 about.qmd                        about page
+subscribe-form.html              email-signup widget, injected on every page via include-after-body
 posts/_metadata.yml              shared post settings (code-fold, freeze)
 posts/double-slit-part1/         part 1: conceptual background on diffraction, interference, and the quantum double-slit
 posts/double-slit-part2/         part 2: Schrödinger-equation derivation of the Gaussian-slit interference pattern
 .devcontainer/devcontainer.json  Codespaces env with Quarto + Python preinstalled
 .github/workflows/publish.yml    render + deploy to GitHub Pages on push to main
 .github/workflows/preview.yml    render a PR into a downloadable artifact
+infra/                           AWS CDK app for the email newsletter backend (SES/Lambda/DynamoDB) -- see infra/README.md
 ```
+
+## Email newsletter
+
+Readers can subscribe via the form on every page (`subscribe-form.html`) and
+get a weekly email when there's a new post, sent through Amazon SES. The
+backend (Lambda, DynamoDB, API Gateway, EventBridge schedule) is a separate
+CDK app in [`infra/`](infra/) — deployed independently of this repo's
+GitHub Pages publish workflow. See [`infra/README.md`](infra/README.md) for
+setup and deploy instructions.

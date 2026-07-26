@@ -6,3 +6,9 @@ __pycache__/
 .ipynb_checkpoints/
 # keep _freeze/ committed if you want CI to skip re-execution; ignored by default here
 /_freeze/
+
+# CDK (infra/) artifacts -- cdk.context.json is intentionally NOT ignored:
+# it caches the Route 53 hosted-zone lookup and should be committed so
+# `cdk synth`/`cdk deploy` are reproducible across machines.
+/infra/cdk.out/
+/infra/.venv/

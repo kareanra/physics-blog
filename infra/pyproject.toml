@@ -1,0 +1,13 @@
+[tool.ruff]
+line-length = 125
+extend-exclude = [".venv", "cdk.out"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+exclude = ["\\.venv", "cdk\\.out"]
+ignore_missing_imports = true
+explicit_package_bases = true
+mypy_path = "lambda/layer/python"
