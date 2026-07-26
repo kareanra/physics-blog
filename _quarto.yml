@@ -9,7 +9,7 @@ project:
 website:
   title: "Computational Physics Notes"
   description: "Worked derivations, intuition, and reproducible code."
-  site-url: "https://kareanra.github.io/physics-blog"
+  site-url: "https://areanraines.com"
   repo-url: "https://github.com/kareanra/physics-blog"
   open-graph:
     image: "images/og-banner.png"
@@ -41,6 +41,7 @@ format:
     fig-format: svg
     fig-dpi: 140
     fig-align: center
+    include-after-body: subscribe-form.html
 
 execute:
   freeze: auto             # re-execute a page only when its source changes

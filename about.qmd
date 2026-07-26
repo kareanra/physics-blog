@@ -2,7 +2,7 @@
 title: "About"
 ---
 
-Short technical notes on physics, worked from first principles and
+Short technical notes on physics, math, and niche interests of mine, worked from first principles and
 paired with runnable code. Every figure is generated when the page 
 is rendered, so the plots always match the
 equations.

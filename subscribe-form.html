@@ -1,0 +1,72 @@
+<section id="subscribe" class="container" style="max-width: 34rem; margin-top: 3rem; margin-bottom: 2rem; padding-top: 1.5rem; border-top: 1px solid #dee2e6;">
+  <h2 style="font-size: 1.15rem; margin-top: 0;">Get new posts by email</h2>
+  <p class="text-muted" style="font-size: 0.95rem;">
+    A weekly email if there's something new. No spam, unsubscribe anytime.
+  </p>
+  <form id="subscribe-form" class="d-flex gap-2" style="gap: 0.5rem;" novalidate>
+    <input
+      type="email"
+      id="subscribe-email"
+      name="email"
+      class="form-control"
+      placeholder="you@example.com"
+      required
+      style="max-width: 20rem;"
+    >
+    <button type="submit" class="btn btn-primary">Subscribe</button>
+  </form>
+  <p id="subscribe-status" role="status" style="margin-top: 0.6rem; font-size: 0.9rem;"></p>
+</section>
+
+<script>
+(function () {
+  var API_BASE_URL = "https://api.updates.areanraines.com";
+  var form = document.getElementById("subscribe-form");
+  var input = document.getElementById("subscribe-email");
+  var status = document.getElementById("subscribe-status");
+
+  if (!form) return;
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var email = input.value.trim();
+    if (!email) return;
+
+    var button = form.querySelector("button");
+    button.disabled = true;
+    status.textContent = "Sending...";
+    status.style.color = "";
+
+    fetch(API_BASE_URL + "/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email }),
+    })
+      .then(function (res) {
+        return res.json().then(function (data) {
+          return { ok: res.ok, data: data };
+        });
+      })
+      .then(function (result) {
+        if (result.ok && result.data.status === "already-subscribed") {
+          status.textContent = "You're already subscribed.";
+          status.style.color = "#198754";
+        } else if (result.ok) {
+          status.textContent = "Check your inbox to confirm your subscription.";
+          status.style.color = "#198754";
+          form.reset();
+        } else {
+          status.textContent = result.data.error || "Something went wrong. Try again later.";
+          status.style.color = "#dc3545";
+        }
+      })
+      .catch(function () {
+        status.textContent = "Something went wrong. Try again later.";
+        status.style.color = "#dc3545";
+      })
+      .finally(function () {
+        button.disabled = false;
+      });
+  });
+})();
+</script>
