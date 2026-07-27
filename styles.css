@@ -13,7 +13,12 @@ h2 { margin-top: 2rem; }
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  color: #fff;
+  /* Quarto's own listing CSS sets color on .listing-category via a more
+     specific selector (e.g. "div.quarto-post .listing-categories
+     .listing-category"), which otherwise beats this rule and leaves the
+     badge text an unreadable gray -- !important is the deliberate,
+     narrowly-scoped fix. */
+  color: #fff !important;
 }
 .listing-category.level-badge-intro { background-color: #198754; }
 .listing-category.level-badge-intermediate { background-color: #b8860b; }
