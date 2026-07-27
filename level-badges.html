@@ -1,0 +1,18 @@
+<script>
+(function () {
+  // Posts carry their difficulty as an ordinary category (e.g. "Intro"),
+  // which Quarto already renders as a .listing-category chip on the listing
+  // page -- this just tags that one chip so styles.css can badge it
+  // differently from topic tags, and floats it to the front.
+  var LEVEL_SLUGS = { "Intro": "intro", "Intermediate": "intermediate", "Advanced": "advanced" };
+
+  document.querySelectorAll(".listing-categories").forEach(function (container) {
+    container.querySelectorAll(".listing-category").forEach(function (chip) {
+      var slug = LEVEL_SLUGS[chip.textContent.trim()];
+      if (!slug) return;
+      chip.classList.add("level-badge", "level-badge-" + slug);
+      container.insertBefore(chip, container.firstChild);
+    });
+  });
+})();
+</script>

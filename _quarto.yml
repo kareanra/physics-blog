@@ -41,7 +41,7 @@ format:
     fig-format: svg
     fig-dpi: 140
     fig-align: center
-    include-after-body: subscribe-form.html
+    include-after-body: [subscribe-form.html, level-badges.html]
 
 execute:
   freeze: auto             # re-execute a page only when its source changes

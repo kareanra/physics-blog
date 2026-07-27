@@ -3,3 +3,18 @@
 figure { margin-top: 1.2rem; margin-bottom: 1.2rem; }
 pre.sourceCode { border-radius: 6px; }
 h2 { margin-top: 2rem; }
+
+/* post-listing difficulty badges -- see level-badges.html, which tags the
+   "Intro"/"Intermediate"/"Advanced" category chip Quarto already renders */
+.listing-category.level-badge {
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #fff;
+}
+.listing-category.level-badge-intro { background-color: #198754; }
+.listing-category.level-badge-intermediate { background-color: #b8860b; }
+.listing-category.level-badge-advanced { background-color: #dc3545; }

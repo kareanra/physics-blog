@@ -4,7 +4,7 @@ description: >
   A description and simulation of cooling atoms with lasers.
 date: 2026-07-19
 author: "Kyle Arean-Raines"
-categories: [lasers, doppler effect, atomic physics]
+categories: [Intermediate, lasers, doppler effect, atomic physics]
 toc: true
 bibliography: ../../references.bib
 ---

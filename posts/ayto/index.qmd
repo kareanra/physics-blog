@@ -4,7 +4,7 @@ description: >
   Using derangements and the "Are You The One" matching game to work out the odds of getting every couple right.
 date: 2026-07-24
 author: "Kyle Arean-Raines"
-categories: [probability, combinatorics, reality TV]
+categories: [Intermediate, probability, combinatorics, reality TV]
 toc: true
 bibliography: ../../references.bib
 ---
