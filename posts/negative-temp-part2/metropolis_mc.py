@@ -6,6 +6,7 @@ from typing import Any
 
 import numpy as np
 from numpy.random import Generator
+from scipy.integrate import cumulative_trapezoid
 
 
 @dataclass(frozen=True)
@@ -72,7 +73,6 @@ class MetropolisMC:
         self.random_arr = self.rng.uniform(low=0.0, high=1.0, size=(lattice_size**2,))
 
         self.lattice.randomize(self.rng)
-        print(f"E_i={self.lattice.energy}")
 
 
     def run(self, beta: float, verbose: bool = True) -> dict[str, float]:
@@ -126,10 +126,38 @@ def total_magnetization(lattice: SpinLattice) -> int:
     return lattice.sum()
 
 
+def entropy(betas: list[float], energies: list[float], lattice_size: int) -> np.ndarray:
+    """Estimate S(beta) via thermodynamic integration, anchored at the
+    beta=0 reference point where every microstate is equally likely:
+
+        S(beta) = N*ln(2) + beta*E(beta) - integral_0^beta E(beta') dbeta'
+    """
+    order = np.argsort(betas)
+    beta_arr = np.asarray(betas)[order]
+    energy_arr = np.asarray(energies)[order]
+
+    zero_indices = np.flatnonzero(beta_arr == 0)
+    if zero_indices.size == 0:
+        raise ValueError("beta=0 must be in the sweep to anchor the entropy reference point")
+    k0 = int(zero_indices[0])
+
+    n_spins = lattice_size**2
+    s0 = n_spins * np.log(2)
+
+    # Cumulative integral of E(beta') over the *whole* sorted sweep, then
+    # re-zeroed at the beta=0 index -- this handles the negative-beta half
+    # of the sweep automatically (no separate branch needed): for k < k0 the
+    # subtraction comes out negative.
+    cumulative = cumulative_trapezoid(energy_arr, beta_arr, initial=0)
+    integral_from_zero = cumulative - cumulative[k0]
+
+    return s0 + beta_arr * energy_arr - integral_from_zero
+
+
 if __name__ == "__main__":
     rng = np.random.default_rng(42)
     results = []
-    for b in np.linspace(-1.0, 1.0, 50):
+    for b in np.linspace(-1.0, 1.0, 501):
         mc = MetropolisMC(
             lattice_size=50,
             gen=rng,
@@ -139,6 +167,16 @@ if __name__ == "__main__":
                 "Magnetization": Observable("Magnetization", dtype=np.int32, sample_fun=total_magnetization),
             },
         )
-        results.append(mc.run(beta=b))
-    # results is a list of {"beta", "E_f", "Energy_mean", "Magnetization_mean"}
-    # dicts, one per beta -- e.g. plt.plot([r["beta"] for r in results], [r["Energy_mean"] for r in results])
+        results.append(mc.run(beta=b, verbose=False))
+    betas = [result["beta"] for result in results]
+    energies = [result["Energy_mean"] for result in results]
+    entropies = entropy(betas, energies, lattice_size=50)
+
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots(figsize=(8, 4.2))
+    ax.plot(energies, entropies, marker="o", ms=3, lw=1)
+    ax.set_xlabel("Energy")
+    ax.set_ylabel("Entropy S")
+    ax.set_title("Entropy vs. energy (2D Ising, periodic BCs)")
+    plt.show()
