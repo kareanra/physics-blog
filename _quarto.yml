@@ -1,7 +1,7 @@
 project:
   type: website
   output-dir: _site
-  execute-dir: project      # run every code cell from the repo root so `import dslit` works
+  execute-dir: file         # run each post's code cells from its own directory, so e.g. `import dslit` in posts/double-slit-part2 resolves the co-located dslit.py
   preview:
     port: 4200
     host: "0.0.0.0"
