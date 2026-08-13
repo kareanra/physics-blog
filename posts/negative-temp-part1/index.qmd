@@ -1,8 +1,8 @@
 ---
 title: "Negative temperature: going below absolute zero, in a sense"
 description: >
-  A description and simulation of a spin lattice in a magnetic field, used
-  to illustrate the concept of temperature below 0 Kelvin.
+  A description and simulation of a grid of magnets in a magnetic field, used
+  to illustrate the concept of temperature going below 0 Kelvin.
 date: 2026-08-13
 author: "Kyle Arean-Raines"
 categories: [Intro, temperature, thermodynamics, statistical mechanics]
