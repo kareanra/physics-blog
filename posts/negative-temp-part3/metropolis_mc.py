@@ -126,7 +126,7 @@ def total_magnetization(lattice: SpinLattice) -> int:
     return lattice.sum()
 
 
-def entropy(betas: list[float], energies: list[float], lattice_size: int) -> np.ndarray:
+def entropy(betas: list[float], energies: list[float], lattice_size: int) -> tuple[np.ndarray, int]:
     """Estimate S(beta) via thermodynamic integration, anchored at the
     beta=0 reference point where every microstate is equally likely:
 
@@ -151,7 +151,7 @@ def entropy(betas: list[float], energies: list[float], lattice_size: int) -> np.
     cumulative = cumulative_trapezoid(energy_arr, beta_arr, initial=0)
     integral_from_zero = cumulative - cumulative[k0]
 
-    return s0 + beta_arr * energy_arr - integral_from_zero
+    return s0 + beta_arr * energy_arr - integral_from_zero, k0
 
 
 if __name__ == "__main__":
@@ -170,12 +170,13 @@ if __name__ == "__main__":
         results.append(mc.run(beta=b, verbose=False))
     betas = [result["beta"] for result in results]
     energies = [result["Energy_mean"] for result in results]
-    entropies = entropy(betas, energies, lattice_size=50)
+    entropies, k0 = entropy(betas, energies, lattice_size=50)
 
     import matplotlib.pyplot as plt
 
     fig, ax = plt.subplots(figsize=(8, 4.2))
-    ax.plot(energies, entropies, marker="o", ms=3, lw=1)
+    ax.plot(energies[:k0], entropies[:k0], marker="o", ms=1, color="#880808")  # negative-T half
+    ax.plot(energies[k0:], entropies[k0:], marker="o", ms=1, color="#6495ED")  # positive-T half
     ax.set_xlabel("Energy")
     ax.set_ylabel("Entropy S")
     ax.set_title("Entropy vs. energy (2D Ising, periodic BCs)")
