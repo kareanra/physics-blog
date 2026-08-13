@@ -1,5 +1,5 @@
 ---
-title: "Negative temperature: going below absolute zero, in a sense"
+title: "Negative temperature: going below absolute zero"
 description: >
   A description and simulation of a grid of magnets in a magnetic field, used
   to illustrate the concept of temperature going below 0 Kelvin.
