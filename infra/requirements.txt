@@ -3,3 +3,5 @@ constructs>=10.0.0
 pydantic>=2.9.0
 numpy>=1.26
 scipy>=1.11
+scipy-stubs>=1.11
+matplotlib>=3.8

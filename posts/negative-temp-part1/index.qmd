@@ -73,10 +73,30 @@ and the entropy (the zooming gets faster and tends to mix the gas up more → mo
 important: in almost all systems, entropy _increases_ with energy.
 We'll see that this is not true of our magnet system, though.
 
+An ideal gas exhibits the usual behavior: entropy climbs with energy → temperature is always positive.
+
+```{python}
+#| label: fig-ideal-gas
+#| fig-cap: "Entropy vs. energy for a monatomic ideal gas (Sackur-Tetrode). The slope at any point is $1/T$, and it never reaches zero, so the temperature is positive at every energy."
+#| code-fold: true
+import matplotlib.pyplot as plt
+import ideal_gas
+
+fig, ax = plt.subplots(figsize=(8, 4.2))
+ideal_gas.draw_entropy_vs_energy(ax)
+plt.show()
+```
+
+The only systems that can achieve a negative temperature are those which have an upper bound to the energy
+the system can take on. A gaseous cloud of particles can always become more energetic, ad infinitum. There is
+no upper bound, and thus no way to get the temperature negative.
+
 Going back to the magnets in the grid, let's assume the magnetic field is oriented in the upward direction
-in our grid, as in the figure above. Then, the magnets will 
+in our grid, as in the figure above. When that's the case, the magnets will 
 tend to orient themselves in the same direction as the magnetic field. This is the lowest-energy state: 
-all magnets facing upward. We know the entropy of this state is exactly 0. So what is the energy?
+all magnets facing upward. We know the entropy of this state is exactly 0 (entropy, being proportional technically
+to the _natural logarithm_ of the number of configurations, of which there is exactly 1: all magnets
+pointing up). So what is the energy?
 
 The energy of a single magnet in a magnetic field turns out to be directly proportional to the strength of the magnetic
 field and the orientation of the single magnet. The energy of a single magnet is
@@ -92,7 +112,7 @@ $$
 where $B$ is the magnetic field strength, $s_i$ is the direction the magnet is pointing, 1 for up and -1 for down
 and $\mu$ is a proportionality constant (a number that multiplies $B$). The minus sign in there
 indicates that lower energy (favorable) orients the magnet in the same direction
-to the magnetic field. The second equation shows that the total energy of the grid of magnets
+as the magnetic field. The second equation shows that the total energy of the grid of magnets
 is just the sum of the individual energies.
 
 For the sake of this discussion it suffices to state that the energy of a single magnet
@@ -108,7 +128,12 @@ As we saw before energy scales (quadratically) with the gas particles' velocitie
 So heating a gas will cause the energy to increase and the particles to zoom around
 faster.
 
-In our system it would seem temperature is not super relevant. How does it
+You may be familiar with the Kelvin scale of temperature, for which the 0 point is the "minimum" temperature,
+at which all atomic motion stops (quantum mechanics and zero-point energy have entered the chat). Systems
+are not supposed to be able to go below absolute zero. After all, what would that mean for the atoms, which are
+already frozen and motionless?
+
+Let's go back to our magnet system. In our system it would seem temperature is not super relevant. How does it
 enter into the picture?
 
 It turns out that the precise definition (in the thermodynamic sense) of the

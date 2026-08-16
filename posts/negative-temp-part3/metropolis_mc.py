@@ -51,7 +51,7 @@ class SpinLattice:
         self.arr[i, j] = -self.arr[i, j]
         self.energy += delta_e
 
-    def sample_observable[T](self, obs: Observable[T]) -> T:
+    def sample_observable[T: np.number](self, obs: Observable[T]) -> T:
         return obs.sample_fun(self)
 
 
