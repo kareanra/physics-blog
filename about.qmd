@@ -2,10 +2,21 @@
 title: "About"
 ---
 
-Short technical notes on physics, math, and niche interests of mine, worked from first principles and
-paired with runnable code. Every figure is generated when the page 
-is rendered, so the plots always match the
-equations.
+Hi, I'm Kyle Arean-Raines. Thanks for visiting my blog! I write about physics and math concepts that interest me
+and that I want to dive deeper into to refresh my memory and understand better. 
+curious about, working through the derivation properly, and pairing it with code that generates the figures. 
+
+I'm a Staff Software Engineer by day, working to solve challenging engineering problems at scale at Toast. 
+Before that I studied chemical engineering at the University of Rochester and got my master's in materials science 
+at Carnegie Mellon.
+
+Posts range from intro-level, with minimal prerequisites and an emphasis on intuition, to advanced with lots of
+math required for a proper understanding of the physics. Categories and difficulty badges are on the main page. 
+If you want new posts by email, there's a subscribe form on every page.
+
+The code and text for this blog are open at github.com/kareanra/physics-blog. 
+Feedback, corrections, and interesting problems are welcome at kyle.areanraines@gmail.com.
 
 The source for the whole site, including the physics module, is on
-[GitHub](https://github.com/kareanra/physics-blog).
+[GitHub](https://github.com/kareanra/physics-blog). Claude helped me out quite a bit with initial project setup
+and gaining familiarity with Quarto. All the prose and derivations are mine.
