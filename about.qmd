@@ -3,8 +3,7 @@ title: "About"
 ---
 
 Hi, I'm Kyle Arean-Raines. Thanks for visiting my blog! I write about physics and math concepts that interest me
-and that I want to dive deeper into to refresh my memory and understand better. 
-curious about, working through the derivation properly, and pairing it with code that generates the figures. 
+and that I want to dive deeper into to refresh my memory and understand better.  
 
 I'm a Staff Software Engineer by day, working to solve challenging engineering problems at scale at Toast. 
 Before that I studied chemical engineering at the University of Rochester and got my master's in materials science 
