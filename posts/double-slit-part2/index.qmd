@@ -216,36 +216,22 @@ fringe spacing measured from the peaks matches @eq-spacing.
 
 ```{python}
 #| label: fig-screen-analytic
-#| fig-cap: "Closed-form Gaussian-slit intensity on the detection screen. Equally spaced fringes sit under a smooth Gaussian envelope."
+#| fig-cap: "Closed-form Gaussian-slit intensity on the detection screen."
 #| code-fold: true
 import numpy as np
 import matplotlib.pyplot as plt
 import dslit
 
 yD = np.linspace(-60e-6, 60e-6, 4000)
-psi_p, psi_m = dslit.per_slit_analytic(yD)
-I = dslit.screen_intensity(psi_p, psi_m, mu=1.0)
+psi_p, psi_m = dslit.psi_per_slit(yD)
+I = dslit.screen_intensity(psi_p, psi_m)
 I = I / I.max()
-fr, env = dslit.fringe_spacing()
 
 fig, ax = plt.subplots(figsize=(8, 4))
 ax.plot(yD * 1e6, I, color="#185FA5", lw=1.5)
-ax.set_xlabel(r"$y_D$ on detection screen [$\mu$m]")
 ax.set_ylabel("normalized intensity")
-ax.set_title(r"Gaussian-slit fringes, $\Delta = \lambda L_2/(a+b)$"
-             f" = {fr*1e6:.2f} µm")
+ax.set_title("Gaussian-slit fringes")
 plt.show()
-```
-
-```{python}
-#| label: spacing-check
-#| code-fold: true
-from scipy.signal import find_peaks
-
-peaks, _ = find_peaks(I, height=0.05)
-measured = np.median(np.diff(np.sort(yD[peaks])))
-print(f"predicted  lambda*L2/(a+b) = {fr*1e6:.3f} um")
-print(f"measured   peak spacing    = {measured*1e6:.3f} um")
 ```
 
 ## Up next

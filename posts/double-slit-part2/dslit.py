@@ -1,23 +1,10 @@
 """
-dslit.py — free-particle path-integral double slit, consolidated.
-
-Single importable module behind the blog series. It merges the three working
-scripts (kernel/transmission, detection screen, decoherence) into one clean API
-so every post can `import dslit` and regenerate its figures at render time.
-
-Physics summary
----------------
-Free-particle kernel from the path integral:
-    K(y,T;y0,0) = sqrt(m / (2*pi*i*hbar*T)) * exp( i*m*(y-y0)^2 / (2*hbar*T) )
-The transverse (y) motion carries the interference; the x-motion is free drift
-that only sets the arrival time T1 = L1/v, with v = sqrt(2E/m).
+Calculation of interference pattern for an electron passing through the double-slit apparatus.
 """
 
 from __future__ import annotations
 
 import numpy as np
-from scipy.integrate import quad
-from scipy.special import erf
 
 # ---- constants (SI) ----
 hbar = 1.054571817e-34
@@ -36,8 +23,8 @@ DEFAULTS = {
 }
 
 
-def derived_quantities(E_eV=DEFAULTS["E_eV"], L1=DEFAULTS["L1"],
-                       sigma0=DEFAULTS["sigma0"], m=m_e):
+def derived_quantities(E_eV: float =DEFAULTS["E_eV"], L1: float =DEFAULTS["L1"],
+                       sigma0: float =DEFAULTS["sigma0"], m: float =m_e) -> dict[str, float]:
     """Velocity, momentum, de Broglie wavelength, arrival time, spread at slits."""
     E = E_eV * q_e
     v = np.sqrt(2 * E / m)
@@ -48,36 +35,12 @@ def derived_quantities(E_eV=DEFAULTS["E_eV"], L1=DEFAULTS["L1"],
     return {"E": E, "v": v, "p": p, "lam": lam, "T1": T1, "sigmaT": sigmaT}
 
 
-def slit_plane_alpha(T1, sigma0=DEFAULTS["sigma0"], m=m_e):
+def slit_plane_alpha(T1, sigma0=DEFAULTS["sigma0"], m=m_e) -> :
     """Complex Gaussian width at the slit plane: alpha1 = sigma0^2 + i*hbar*T1/(2m)."""
     return sigma0**2 + 1j * hbar * T1 / (2 * m)
 
 
-# ---------------------------------------------------------------------------
-# Transmission through either slit
-# ---------------------------------------------------------------------------
-def P_closed_form(a=DEFAULTS["a"], b=DEFAULTS["b"], sigmaT=None, **kw):
-    """Closed-form transmission through either slit (erf), both slits by symmetry."""
-    if sigmaT is None:
-        sigmaT = derived_quantities(**kw)["sigmaT"]
-    s = np.sqrt(2) * sigmaT
-    return erf((a / 2 + b) / s) - erf((a / 2) / s)
-
-
-def P_quadrature(a=DEFAULTS["a"], b=DEFAULTS["b"], sigmaT=None, **kw):
-    """Same transmission by numerical quadrature of |psi|^2 over the openings."""
-    if sigmaT is None:
-        sigmaT = derived_quantities(**kw)["sigmaT"]
-    dens = lambda y: np.exp(-y**2 / (2 * sigmaT**2)) / (np.sqrt(2 * np.pi) * sigmaT)
-    top, _ = quad(dens, a / 2, a / 2 + b)
-    bot, _ = quad(dens, -a / 2 - b, -a / 2)
-    return top + bot
-
-
-# ---------------------------------------------------------------------------
-# Detection screen (per-slit amplitudes for both models)
-# ---------------------------------------------------------------------------
-def per_slit_analytic(yD, E_eV=DEFAULTS["E_eV"], L1=DEFAULTS["L1"], L2=DEFAULTS["L2"],
+def psi_per_slit(yD, E_eV=DEFAULTS["E_eV"], L1=DEFAULTS["L1"], L2=DEFAULTS["L2"],
                       a=DEFAULTS["a"], b=DEFAULTS["b"], sigma0=DEFAULTS["sigma0"],
                       beta=None, m=m_e):
     """Closed-form screen amplitude from each slit (Gaussian slits)."""
@@ -100,25 +63,14 @@ def per_slit_analytic(yD, E_eV=DEFAULTS["E_eV"], L1=DEFAULTS["L1"], L2=DEFAULTS[
     return term(+1), term(-1)
 
 
-def screen_intensity(psi_p, psi_m, mu=1.0):
-    """Screen intensity with a which-path coherence factor mu in [0,1] on the cross term."""
+def screen_intensity(psi_p, psi_m):
+    """Screen intensity on the detector as a function of y."""
     return (np.abs(psi_p)**2 + np.abs(psi_m)**2
-            + 2 * np.real(mu * psi_p * np.conj(psi_m)))
+            + 2 * np.real(psi_p * np.conj(psi_m)))
 
 
-def fringe_spacing(E_eV=DEFAULTS["E_eV"], L2=DEFAULTS["L2"],
-                   a=DEFAULTS["a"], b=DEFAULTS["b"], L1=DEFAULTS["L1"],
-                   sigma0=DEFAULTS["sigma0"], m=m_e):
-    """Far-field fringe spacing lambda*L2/(a+b) and single-slit envelope first zero."""
-    lam = derived_quantities(E_eV=E_eV, L1=L1, sigma0=sigma0, m=m)["lam"]
-    return lam * L2 / (a + b), lam * L2 / b
-
-
-# ---------------------------------------------------------------------------
-# Schematic (matplotlib) so the setup figure is reproducible too
-# ---------------------------------------------------------------------------
 def draw_schematic(ax=None):
-    """Draw the labeled double-slit geometry on a matplotlib axis."""
+    """Draw the labeled double-slit geometry on a matplotlib axis (credit to Claude)."""
     import matplotlib.pyplot as plt
     from matplotlib.patches import Rectangle
     if ax is None:
@@ -152,12 +104,3 @@ def draw_schematic(ax=None):
     ax.set_ylim(-3.2, 3.2)
     ax.axis("off")
     return ax
-
-
-if __name__ == "__main__":
-    d = derived_quantities()
-    print(f"de Broglie = {d['lam']*1e12:.3f} pm, sigma(T1) = {d['sigmaT']*1e6:.3f} um")
-    print(f"P(either slit): closed form = {P_closed_form():.6f}, "
-          f"quadrature = {P_quadrature():.6f}")
-    fr, env = fringe_spacing()
-    print(f"fringe spacing = {fr*1e6:.3f} um, envelope zero = {env*1e6:.3f} um")
