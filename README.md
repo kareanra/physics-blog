@@ -13,9 +13,11 @@ email subscriptions and scheduled weekly newsletter delivery.
 - [Quarto](https://quarto.org) — static site generator with executable code blocks
 - Python (numpy, scipy, matplotlib) — physics simulations and figure generation
 - GitHub Pages — hosting, with a custom domain via CNAME
+
 **CI/CD and developer environment**
 - GitHub Actions — publish on push to `main`; PR preview builds attached as downloadable artifacts
 - Dev Container / Codespaces — cloud dev environment with Quarto and Python preinstalled, so contributors need nothing installed locally
+
 **Email newsletter backend** (in [`infra/`](infra/))
 - AWS CDK — infrastructure as code
 - API Gateway — subscribe / unsubscribe REST endpoints
@@ -34,7 +36,8 @@ which require Quarto on your own machine.
 The `.github/workflows/publish.yml` workflow installs Quarto and Python in CI,
 runs `quarto render`, and deploys to GitHub Pages on every push to `main`. To go
 live: create the repo, set **Settings → Pages → Source: GitHub Actions**, and
-push. The site builds and deploys automatically to `https://kareanra.github.io/physics-blog`.
+push. The site builds and deploys automatically, and the `CNAME` file points
+the GitHub Pages URL at the custom domain [areanraines.com](https://areanraines.com).
  
 ### 2. Preview a change before it merges (no local tooling)
  
@@ -45,13 +48,20 @@ the workflow run. Download it and open `index.html` to review.
 ## Structure
  
 ```
-_quarto.yml                      site + build config (execute-dir: project)
-dslit.py                         consolidated physics module imported by all posts
+_quarto.yml                      site + build config (execute-dir: file — see below)
 index.qmd                        blog listing
 about.qmd                        about page
+references.bib                   shared BibTeX bibliography for every post
+requirements.txt                 Python deps installed by CI and the dev container
+styles.css                       site styles
 subscribe-form.html              email-signup widget, present on every page via include-after-body
-posts/_metadata.yml              shared post settings
-posts/                           individual blog posts
+level-badges.html                badges the Intro/Intermediate/Advanced category chip on the listing page
+CNAME                            custom domain for GitHub Pages (areanraines.com)
+posts/_metadata.yml              settings inherited by every post
+posts/<post>/index.qmd           the post itself
+posts/<post>/<module>.py         that post's own physics module, imported by its code cells
+diagrams/<post>/                 hand-drawn SVGs for a post (figures from code are generated at render time)
+images/                          site-level images (Open Graph banner)
 .devcontainer/devcontainer.json  Codespaces env with Quarto + Python preinstalled
 .github/workflows/publish.yml    render + deploy to GitHub Pages on push to main
 .github/workflows/preview.yml    render a PR into a downloadable artifact
