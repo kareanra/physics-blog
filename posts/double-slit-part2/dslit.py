@@ -5,14 +5,20 @@ Calculation of interference pattern for an electron passing through the double-s
 from __future__ import annotations
 
 import numpy as np
+from matplotlib.axes import Axes
+from matplotlib.patches import Rectangle
+from numpy.typing import NDArray
+
+FloatArray = NDArray[np.float64]
+ComplexArray = NDArray[np.complexfloating]
 
 # ---- constants (SI) ----
-hbar = 1.054571817e-34
-m_e = 9.1093837015e-31
-q_e = 1.602176634e-19
+hbar: float = 1.054571817e-34
+m_e: float = 9.1093837015e-31
+q_e: float = 1.602176634e-19
 
 # ---- default scenario: 1 keV electron, micron-scale optics ----
-DEFAULTS = {
+DEFAULTS: dict[str, float] = {
     "E_eV": 1.0e3,     # kinetic energy [eV]
     "L1": 0.10,        # source-to-slit drift [m]
     "L2": 0.50,        # slit-to-detection-screen distance [m]
@@ -23,60 +29,61 @@ DEFAULTS = {
 }
 
 
-def derived_quantities(E_eV: float =DEFAULTS["E_eV"], L1: float =DEFAULTS["L1"],
-                       sigma0: float =DEFAULTS["sigma0"], m: float =m_e) -> dict[str, float]:
+def derived_quantities() -> dict[str, float]:
     """Velocity, momentum, de Broglie wavelength, arrival time, spread at slits."""
-    E = E_eV * q_e
-    v = np.sqrt(2 * E / m)
-    p = m * v
-    lam = 2 * np.pi * hbar / p
-    T1 = L1 / v
-    sigmaT = np.sqrt(sigma0**2 + (hbar * T1 / (2 * m * sigma0))**2)
+    m: float = DEFAULTS["m"]
+    sigma0: float = DEFAULTS["sigma0"]
+    E: float = DEFAULTS["E_eV"] * q_e
+    v: float = np.sqrt(2 * E / m)
+    p: float = m * v
+    lam: float = 2 * np.pi * hbar / p
+    T1: float = DEFAULTS["L1"] / v
+    sigmaT: float = np.sqrt(sigma0**2 + (hbar * T1 / (2 * m * sigma0))**2)
     return {"E": E, "v": v, "p": p, "lam": lam, "T1": T1, "sigmaT": sigmaT}
 
 
-def slit_plane_alpha(T1, sigma0=DEFAULTS["sigma0"], m=m_e) -> :
+def slit_plane_alpha(T1: float) -> complex:
     """Complex Gaussian width at the slit plane: alpha1 = sigma0^2 + i*hbar*T1/(2m)."""
-    return sigma0**2 + 1j * hbar * T1 / (2 * m)
+    return DEFAULTS["sigma0"]**2 + 1j * hbar * T1 / (2 * DEFAULTS["m"])
 
 
-def psi_per_slit(yD, E_eV=DEFAULTS["E_eV"], L1=DEFAULTS["L1"], L2=DEFAULTS["L2"],
-                      a=DEFAULTS["a"], b=DEFAULTS["b"], sigma0=DEFAULTS["sigma0"],
-                      beta=None, m=m_e):
+def psi_per_slit(yD: FloatArray) -> tuple[ComplexArray, ComplexArray]:
     """Closed-form screen amplitude from each slit (Gaussian slits)."""
-    if beta is None:
-        beta = b / np.sqrt(2 * np.pi)            # equal integrated transmission vs hard slit
-    dd = derived_quantities(E_eV=E_eV, L1=L1, sigma0=sigma0, m=m)
-    T1, v = dd["T1"], dd["v"]
-    T2 = L2 / v
-    alpha1 = slit_plane_alpha(T1, sigma0, m)
-    y_s = (a + b) / 2.0
-    lam2 = 1j * m / (2 * hbar * T2)
-    Ac = 1.0 / (4 * alpha1) + 1.0 / (2 * beta**2)
-    p = Ac - lam2
+    a: float = DEFAULTS["a"]
+    b: float = DEFAULTS["b"]
+    beta: float = b / np.sqrt(2 * np.pi)          # equal integrated transmission vs hard slit
+    dd: dict[str, float] = derived_quantities()
+    T1: float = dd["T1"]
+    v: float = dd["v"]
+    T2: float = DEFAULTS["L2"] / v
+    alpha1: complex = slit_plane_alpha(T1)
+    y_s: float = (a + b) / 2.0
+    lam2: complex = 1j * DEFAULTS["m"] / (2 * hbar * T2)
+    Ac: complex = 1.0 / (4 * alpha1) + 1.0 / (2 * beta**2)
+    p: complex = Ac - lam2
 
-    def term(j):
-        Bj = j * y_s / beta**2
-        Qj = Bj - 2 * lam2 * yD
+    def term(j: int) -> ComplexArray:
+        Bj: float = j * y_s / beta**2
+        Qj: ComplexArray = Bj - 2 * lam2 * yD
         return np.sqrt(np.pi / p) * np.exp(Qj**2 / (4 * p)) * np.exp(lam2 * yD**2)
 
     return term(+1), term(-1)
 
 
-def screen_intensity(psi_p, psi_m):
+def screen_intensity(psi_p: ComplexArray, psi_m: ComplexArray) -> FloatArray:
     """Screen intensity on the detector as a function of y."""
     return (np.abs(psi_p)**2 + np.abs(psi_m)**2
             + 2 * np.real(psi_p * np.conj(psi_m)))
 
 
-def draw_schematic(ax=None):
+def draw_schematic(ax: Axes | None = None) -> Axes:
     """Draw the labeled double-slit geometry on a matplotlib axis (credit to Claude)."""
     import matplotlib.pyplot as plt
-    from matplotlib.patches import Rectangle
     if ax is None:
         _, ax = plt.subplots(figsize=(8, 4.2))
-    barrier_x, wall = 7.0, 0.28
-    segs = [(1.5, 3.0), (-0.5, 0.5), (-3.0, -1.5)]         # upper wall, septum, lower wall
+    barrier_x: float = 7.0
+    wall: float = 0.28
+    segs: list[tuple[float, float]] = [(1.5, 3.0), (-0.5, 0.5), (-3.0, -1.5)]   # upper wall, septum, lower wall
     for lo, hi in segs:
         ax.add_patch(Rectangle((barrier_x, lo), wall, hi - lo,
                                facecolor="#5F5E5A", edgecolor="none"))
@@ -92,8 +99,9 @@ def draw_schematic(ax=None):
     ax.annotate("", (barrier_x - 0.15, -2.0), (0.5, -2.0),
                 arrowprops={"arrowstyle": "<->", "color": "#444441", "lw": 1})
     ax.text((0.5 + barrier_x) / 2, -2.35, r"$L_1$", fontsize=12, ha="center")
-    xr = barrier_x + wall + 0.15
-    for (lo, hi, lab) in [(0.5, 1.5, "b"), (-0.5, 0.5, "a"), (-1.5, -0.5, "b")]:
+    xr: float = barrier_x + wall + 0.15
+    labels: list[tuple[float, float, str]] = [(0.5, 1.5, "b"), (-0.5, 0.5, "a"), (-1.5, -0.5, "b")]
+    for (lo, hi, lab) in labels:
         ax.annotate("", (xr, hi), (xr, lo),
                     arrowprops={"arrowstyle": "<->", "color": "#5F5E5A", "lw": 0.8})
         ax.text(xr + 0.18, (lo + hi) / 2, f"${lab}$", fontsize=12, va="center")

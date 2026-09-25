@@ -48,9 +48,49 @@ $$
 where $\Psi$ is the wavefunction, which varies in space and time and $V(\mathbf{r}, t)$ is the potential energy. The
 wavefunction describes the probability of finding a particle at a given point in space at a given time.
 
+#### The free particle Gaussian wave packet
+
+In any graduate textbook on quantum theory, you'll find a solution to the Schrödinger equation that is a wave "packet."
+This is a wavefunction $\Psi(x, t)$ that has the form of a Gaussian ($\propto e^{\alpha x^2}$). In other words, the wavefunction 
+is slightly spread out over space rather than all the probability being concentrated at a point. You can get some cool 
+intuition and solve more problems with this type of wavefunction. Aside: it's also easy to demonstrate the relationship
+between position uncertainty and momentum uncertainty with such a wave packet. 
+
+**Question for the reader**:
+_How would you show that relationship using a wave packet? (Hint: the momentum space wavefunction is essentially 
+obtained through a 
+Fourier transform of the [Gaussian] position wavefunction, and describes how spread out the momentum is - with
+more spread out being higher uncertainty)_.
+
+That this solves the Schrödinger equation can be easily shown. You can find the derivation in most graduate texts, 
+including [Cohen-Tannoudji - CITE]
+
+#### Quick detour on the Feynman approach
+
+I recently dusted off Feynman and Hibbs' Quantum Mechanics and Path Integrals (CITE), a fascinating treatment of
+quantum mechanics that doesn't use much of the linear algebra and operator-based formulation. The core idea
+here (without regurgitating everything) is that there is a cool, different way of calculating the probability
+amplitude of a particle that starts at $(x_0, t_0)$ in spacetime arriving at $(x_1, t_1)$.
+
+The propagator for a free particle (that which is traveling through space with no potential anywhere)
+is defined as follows (presented without justification; see Feynman and Hibbs):
+
+$$
+K(x_b, t_b; x_a, t_a) = \sqrt{\frac{m}{2\pi i \hbar (t_b - t_a)}}\;
+\exp\!\left[\frac{i m (x_b - x_a)^2}{2\hbar (t_b - t_a)}\right]
+$$
+
+This happens to be exactly what we're looking for - the propagator tells us the probability of arriving at the top
+or bottom slit at a given time, and then due to its linearity can be multiplied and integrated with the propagator
+for the particle starting at either slit and arriving at some point on the detector screen.
+
+So without further ado, let's jump into the math.
+
 #### The setup
 
-Now let's make this concrete with our experiment. A free electron leaves the origin traveling in $+x$
+Now we have a solution that models a particle in real space, slightly spread out, and which solves the
+Schrödinger equation. Let's make all this concrete with our experiment. 
+A free electron leaves the origin traveling in $+x$
 toward a screen a distance $L_1$ away. The screen has two slits: the top slit
 spans $y \in [+a/2,\, +a/2+b]$ and the bottom slit $y \in [-a/2-b,\, -a/2]$, so
 the central barrier between them has height $a$ and each opening has height $b$.
@@ -71,35 +111,18 @@ plt.show()
 
 Here we let the transmitted wave keep going to a
 detection screen a distance $L_2$ beyond the slits and derive the interference
-pattern in closed form. The trick is to model each slit as a Gaussian aperture:
-a Gaussian packet times a Gaussian slit is still Gaussian, and free evolution
+pattern in closed form. The trick is to model each slit as a Gaussian aperture.
+A Gaussian packet times a Gaussian slit is still Gaussian, and free evolution using the propagator
 maps Gaussians to Gaussians, so every step stays analytic and no grid is needed.
 
-Throughout, $y$ is the transverse coordinate and the along-axis drift just
-supplies a clock: the packet reaches the slits at $t_1 = L_1/v$ and the screen at
+Throughout, $y$ is the transverse coordinate and the along-axis drift is just the time axis.
+The packet reaches the slits at $t_1 = L_1/v$ and the screen at
 $t_2 = L_2/v$, with $v = \hbar k_0/m$. The incident state is the standard free
-Gaussian wave packet of Cohen-Tannoudji (Complement $G_I$).
-
-::: {.callout-note collapse="true"}
-##### The complex Gaussian integral
-
-Every evolution step below is a single application of the complex Gaussian
-integral
-
-$$
-\int_{-\infty}^{\infty} e^{-A y^2 + B y + C}\,dy
-= \sqrt{\frac{\pi}{A}}\;\exp\!\left[\frac{B^2}{4A} + C\right],
-\qquad \operatorname{Re} A > 0,
-$$
-
-which stays valid by analytic continuation when $A$ is complex with positive
-real part.
-:::
+Gaussian wave packet of Cohen-Tannoudji (Complement $G_I$ - CITE).
 
 ##### The incident packet
 
-Start with a Gaussian wave packet along $y$, following the convention found in many graduate texts (see e.g. Cohen-Tannoudji, 
-Sakurai).
+Starting with a Gaussian wave packet along $y$,
 
 $$
 \psi(y,0) = \left(\frac{1}{2\pi\sigma_0^2}\right)^{1/4} e^{-y^2/4\sigma_0^2},
@@ -109,7 +132,7 @@ $$ {#eq-psi0}
 
 ##### Free evolution to the slit plane
 
-Convolve @eq-psi0 with the free-particle kernel over $t_1$, writing
+Applying the propagator, we can convolve @eq-psi0 with the propagator over $t_1$, writing
 $s \equiv i m / 2\hbar t_1$:
 
 $$
@@ -118,7 +141,7 @@ $$
 $$
 
 Collecting the $y'$ terms gives $A = \tfrac{1}{4\sigma_0^2} - s$, $B = -2sy$, and
-$C = sy^2$. The integral identity, together with $1/s = -2i\hbar t_1/m$,
+$C = sy^2$. A complex Gaussian integral identity, together with $1/s = -2i\hbar t_1/m$,
 collapses the exponent to $-y^2/4\alpha_1$ and the prefactor to
 $\sqrt{\sigma_0^2/\alpha_1}$, with
 
@@ -129,13 +152,12 @@ $$
 \quad N_1 = N_0\sqrt{\frac{\sigma_0^2}{\alpha_1}}.
 $$ {#eq-alpha1}
 
-This is the Cohen-Tannoudji spreading packet: the modulus of @eq-alpha1 gives
-$\Delta y(t_1) = \sigma_0\sqrt{1 + (\hbar t_1/2m\sigma_0^2)^2}$. Both the analytic track here and
-the hard-slit numeric track saved for later start from this arrived packet.
+This is the Cohen-Tannoudji spreading packet. The modulus of @eq-alpha1 gives
+$\Delta y(t_1) = \sigma_0\sqrt{1 + (\hbar t_1/2m\sigma_0^2)^2}$.
 
 ##### The Gaussian slits
 
-For the sake of reaching a closed form solution: model the two openings as Gaussian apertures centered at
+For the sake of reaching a closed form solution, I've modeled the two openings as Gaussian apertures centered at
 $y_\pm = \pm y_s$, with
 $y_s = (a+b)/2$ and width $\beta = b/\sqrt{2\pi}$ (chosen so a uniformly
 illuminated Gaussian slit transmits the same flux as a hard slit of height $b$):
@@ -159,7 +181,7 @@ $$ {#eq-combine}
 
 ##### Evolution to the screen
 
-Convolve $\phi$ with the free kernel over $t_2$, writing
+Again, we convolve $\phi$ with the free kernel - this time over $t_2$. Then we write
 $\lambda_2 \equiv i m / 2\hbar t_2$:
 
 $$
@@ -175,7 +197,7 @@ q_j = b_j - 2\lambda_2 y_D, \qquad
 r = \lambda_2 y_D^2 + c_0 .
 $$ {#eq-pqr}
 
-Since $\lambda_2$ is pure imaginary, $\operatorname{Re} p = \operatorname{Re}(1/4\alpha_1) + 1/2\beta^2 > 0$
+Since $\lambda_2$ is imaginary, $\operatorname{Re} p = \operatorname{Re}(1/4\alpha_1) + 1/2\beta^2 > 0$
 and the integral converges. Applying the identity,
 
 $$
@@ -206,8 +228,7 @@ $$
 \boxed{\;I(y_D) = E(y_D)\cdot \frac{\cosh(2\kappa_r y_D) + \cos(2\kappa_i y_D)}{2}\;}
 $$ {#eq-intensity}
 
-The $\cos(2\kappa_i y_D)$ term is the interference; the $\cosh$ term and $E$ together
-form the single-slit envelope.
+The $\cos(2\kappa_i y_D)$ term is the interference fringes that has that classic quantum signature.
 
 ##### The pattern
 
