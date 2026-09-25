@@ -63,11 +63,11 @@ Fourier transform of the [Gaussian] position wavefunction, and describes how spr
 more spread out being higher uncertainty)_.
 
 That this solves the Schrödinger equation can be easily shown. You can find the derivation in most graduate texts, 
-including [Cohen-Tannoudji - CITE]
+including @cohen-tannoudji.
 
 #### Quick detour on the Feynman approach
 
-I recently dusted off Feynman and Hibbs' Quantum Mechanics and Path Integrals (CITE), a fascinating treatment of
+I recently dusted off Feynman and Hibbs' Quantum Mechanics and Path Integrals [@feynman-hibbs], a fascinating treatment of
 quantum mechanics that doesn't use much of the linear algebra and operator-based formulation. The core idea
 here (without regurgitating everything) is that there is a cool, different way of calculating the probability
 amplitude of a particle that starts at $(x_0, t_0)$ in spacetime arriving at $(x_1, t_1)$.
@@ -118,7 +118,7 @@ maps Gaussians to Gaussians, so every step stays analytic and no grid is needed.
 Throughout, $y$ is the transverse coordinate and the along-axis drift is just the time axis.
 The packet reaches the slits at $t_1 = L_1/v$ and the screen at
 $t_2 = L_2/v$, with $v = \hbar k_0/m$. The incident state is the standard free
-Gaussian wave packet of Cohen-Tannoudji (Complement $G_I$ - CITE).
+Gaussian wave packet of Cohen-Tannoudji [-@cohen-tannoudji, Complement $G_I$].
 
 ##### The incident packet
 
@@ -260,6 +260,11 @@ plt.show()
 We now have a beam that reaches the slits, and the fraction that gets
 through. In Part 3 we will solve the problem for two slits numerically,
 dropping the assumption of Gaussian-shaped slits. There is no analytical solution to this next problem.
+
+## References
+
+::: {#refs}
+:::
 
 The full source for this series is on
 [GitHub](https://github.com/kareanra/physics-blog).
